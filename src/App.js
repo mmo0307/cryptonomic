@@ -9,7 +9,7 @@ import Navbar from './Component/Navbar/Navbar';
 import CoinMain from './Pages/coin/CoinMain';
 import NewsMain from './Pages/news/NewsMain';
 
-import './app.css';
+import './App.css';
 
 const App = () => {
   return (
