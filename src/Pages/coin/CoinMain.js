@@ -81,7 +81,7 @@ const [error, setError] = useState(false);
             filteredCoins.map(data => {
               return (
                   <Coin 
-                  key={data.id} 
+                  id={data.id} 
                   name={data.name} 
                   image={data.image}
                   symbol={data.symbol}

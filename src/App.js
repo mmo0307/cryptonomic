@@ -8,6 +8,9 @@ import {
 import Navbar from './Component/Navbar/Navbar';
 import CoinMain from './Pages/coin/CoinMain';
 import NewsMain from './Pages/news/NewsMain';
+import CoinInfo from './Component/CoinInfo/CoinInfo';
+import Page404 from './Component/404/404';
+
 
 import './App.css';
 
@@ -19,6 +22,9 @@ const App = () => {
       <Routes>
         <Route element={<CoinMain />} path="/" />
         <Route element={<NewsMain />} path="/news" />
+        <Route path="/:id" element={<CoinInfo />} />
+
+        <Route path="*" element={<Page404 />} />
       </Routes>
     </Router>
   );

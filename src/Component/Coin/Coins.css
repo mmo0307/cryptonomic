@@ -65,3 +65,24 @@
 .green{
     color: #11d811;
 }
+
+@media screen and (max-width: 1000px) {
+    .coin-marketcap, .coin-volume{
+        display: none;
+    }
+    .coin-container{
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .coin{
+        min-width: 120px;
+    }
+    .coin-symbol{
+        display: none;
+    }
+    .coin-row{
+        width: 354px;
+    }
+}
