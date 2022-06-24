@@ -32,8 +32,7 @@ const [error, setError] = useState(false);
       }).catch(() => {
           setError(true);
           setLoading(false);
-        }
-      );
+      });
   }
 
   const handleSearch = e => {

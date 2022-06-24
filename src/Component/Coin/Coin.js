@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function Coin({image, name, symbol, price, volume, id, priceChange, marketcap}) {
   console.log(id);
   return (
-    <Link to={`/${id}`}>
+    <Link to={`/coin/${id}`}>
       <div className='coin-container' id={id}>
           <div className="coin-row">
               <div className="coin">

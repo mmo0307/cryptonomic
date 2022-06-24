@@ -10,3 +10,7 @@ body::-webkit-scrollbar-thumb {
     background-color: rgb(255, 255, 255);    /* color of the scroll thumb */
     border-radius: 20px;  /* creates padding around scroll thumb */
 }
+
+a{
+    text-decoration: none;
+}

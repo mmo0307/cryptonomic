@@ -38,6 +38,7 @@
   border: 1px solid gray;
 }
 
-.coin-input::focus{
+.coin-input:focus{
+  outline: none;
   border: 1px solid white;
 }

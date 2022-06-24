@@ -70,9 +70,6 @@
     .coin-marketcap, .coin-volume{
         display: none;
     }
-    .coin-container{
-        width: 50%;
-    }
 }
 
 @media screen and (max-width: 425px) {
