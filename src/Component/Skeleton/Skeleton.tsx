@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react";
 
-import './skeleton.css';
+import "./skeleton.css";
 
-export default function Skeleton() {
+const Skeleton: React.FC = () => {
   return (
     <div className="box">
       <div className="post">
@@ -23,5 +23,7 @@ export default function Skeleton() {
         <div className="line"></div>
       </div>
     </div>
-  )
-}
+  );
+};
+
+export { Skeleton };
