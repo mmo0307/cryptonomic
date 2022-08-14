@@ -26,6 +26,7 @@ const CoinSearch = styled.div`
     height: 50px;
     border-radius: 4px;
     border: 1px solid gray;
+    background-color: #1a1a1c;
   }
 
   & input:focus{

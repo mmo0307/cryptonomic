@@ -57,5 +57,5 @@ const Coin: React.FC<{
     </Link>
   );
 };
-
+ 
 export { Coin };
