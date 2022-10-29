@@ -41,7 +41,7 @@ const NewsItem: React.FC<{ data: Data }> = ({ data }) => {
             </div>
           </CardAuthor>
           <div style={{marginTop: '20px'}}>
-            <a href={data.link}>Read More</a>
+            <a href={data.link} target="_blank" rel="noopener noreferrer">Read More</a>
           </div>
         </CardBody>
       </CardContainer>

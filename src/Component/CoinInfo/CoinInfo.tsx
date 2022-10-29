@@ -147,8 +147,6 @@ const CoinInfo: React.FC = () => {
 
   let { id } = useParams<string>();
 
-  console.log(data_coin);
-
   useEffect(() => {
       axios
         .get(
@@ -183,7 +181,6 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
     description,
     symbol,
     market_data,
-    tickers,
   } = data;
 
   const [active, setActive] = useState<boolean>(false);
@@ -193,10 +190,8 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
       (market_data.low_24h.usd - market_data.high_24h.usd)) *
     100;
   const percent:string = market_data.price_change_percentage_24h.toFixed(2);
-  const flag:boolean = +percent > 0 ? true : false;
+  const flag:boolean = +percent > 0;
 
-  let x_bar:any[]= [];
-  let y_bar:any[] = [];
   let x_lines:any[]= [];
   let y_lines:any[] = [];
 
@@ -204,9 +199,6 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
     x_lines.push(key);
     y_lines.push(market_data.sparkline_7d.price[key]);
   }
-
-  console.log(x_lines)
-  console.log(y_lines)
 
   return (
     <>
@@ -328,9 +320,10 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
                 <ReadMore>Read more</ReadMore>
               )}
               <Title mt="10px">Tags</Title>
-              <Categories>{categories}</Categories>
+              <Categories>{categories.map((cat) => cat + '; ')}</Categories>
             </MediaBlock>
           </Container>
+
           <ContainerChart>
             <Plot
               data={[
