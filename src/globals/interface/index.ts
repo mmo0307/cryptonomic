@@ -3,8 +3,19 @@ export interface DataCoins {
     price: string;
 }
 
-export interface Coins {
+export interface CoinsAttr {
     symbol: string;
-    price: string;
+    price: number;
     coin: string;
+    count: number;
 }
+
+export interface CoinsResult {
+    symbol: string;
+    priceBtc: number;
+   // priceEth: number;
+    //priceBnb: number;
+    percent: number;
+}
+
+export type Coins = Omit<CoinsAttr, 'count'>;

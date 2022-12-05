@@ -67,7 +67,7 @@ a {
   }
 }
 
-/* Animtions */
+/* Animations */
 @keyframes worm1 {
   from {
     animation-timing-function: ease-in-out;

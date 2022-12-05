@@ -90,8 +90,8 @@ const NewMain: React.FC = () => {
           </svg>
         </div>
       ) : (
-        data.map((el, indx) => {
-          return <NewsItem key={indx} data={el} />;
+        data.map((el, index) => {
+          return <NewsItem key={index} data={el} />;
         })
       )}
     </ContainerBox>
