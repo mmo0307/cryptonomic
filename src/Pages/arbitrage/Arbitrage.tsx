@@ -10,23 +10,6 @@ export const Arbitrage = () => {
     const [result, setResult] = useState<CoinsResult[]>([]);
     const [takePair, setTakePair] = useState<string>('');
 
-    // const filterFirstCoins = useCallback( (dataCoins:DataCoins[]) => {
-    //     console.log('dataCoins=>', dataCoins);
-    //     setCoinsFirst([]);
-    //     dataCoins.map((item:DataCoins) => {
-    //         if(item.symbol.includes('USDT')){
-    //             setCoinsFirst((prev) => [...prev,
-    //             {
-    //                 coin: item.symbol.split('USDT')[0],
-    //                 symbol: 'USDT',
-    //                 price: item.price,
-    //                 count: 500/+item.price
-    //             }
-    //             ]);
-    //         }
-    //     });
-    // }, []);
-
     useEffect(() => {
             axios.get('https://api1.binance.com/api/v3/ticker/price').then(response => {
                 setCoins(response.data);
@@ -52,61 +35,122 @@ export const Arbitrage = () => {
                 setCoinsPair((prev) => [...prev, item]);
             }
 
-            if(item.symbol.includes('USDT')) {
-                if (item.symbol.split('USDT')[0] !== '') {
-                    setFilterCoins((prev) => [...prev,
-                        {
-                            coin: item.symbol.split('USDT')[0],
-                            symbol: 'USDT',
-                            price: +item.price,
-                            count: 500 / +item.price
+            if(item.symbol.includes('USDT') || 
+                item.symbol.includes('BTC') || 
+                item.symbol.includes('BNB') || 
+                item.symbol.includes('ETH')) {
+
+                if (item.symbol.split('USDT')[0] !== '' || 
+                    item.symbol.split('BTC')[0] !== '' || 
+                    item.symbol.split('BNB')[0] !== '' || 
+                    item.symbol.split('ETH')[0] !== '') {
+
+                    let pair:string = '';
+
+                    if(item.symbol.split('USDT')[1] === ''){
+                        pair = 'USDT';
+                    }
+                    if(item.symbol.split('BTC')[1] === ''){
+                        pair = 'BTC';
+                    }
+                    if(item.symbol.split('BNB')[1] === ''){
+                        pair = 'BNB';
+                    }
+                    if(item.symbol.split('ETH')[1] === ''){
+                        pair = 'ETH';
+                    }
+                    
+                    console.log(item.symbol.split(pair)[0]);
+                    console.log(filterCoins.find(el => el.coin === 'ETH'));
+                    
+                    switch(pair){
+                        case 'USDT': {
+                            setFilterCoins((prev) => [...prev,
+                                {
+                                    coin: item.symbol.split('USDT')[0],
+                                    symbol: 'USDT',
+                                    price: +item.price
+                                }
+                            ]);
+                            break;
                         }
-                    ]);
+                        case 'BTC': {
+                            setFilterCoins((prev) => [...prev,
+                                {
+                                    coin: item.symbol.split('BTC')[0],
+                                    symbol: 'BTC',
+                                    price: +item.price
+                                }
+                            ]);
+                            break;
+                        }
+                        case 'BNB': {
+                            setFilterCoins((prev) => [...prev,
+                                {
+                                    coin: item.symbol.split('BNB')[0],
+                                    symbol: 'BNB',
+                                    price: +item.price
+                                }
+                            ]);
+                            break;
+                        }
+                        case 'ETH': {
+                            setFilterCoins((prev) => [...prev,
+                                {
+                                    coin: item.symbol.split('ETH')[0],
+                                    symbol: 'ETH',
+                                    price: +item.price
+                                }
+                            ]);
+                            break;
+                        }
+                    }
+                    
                 }
             }
 
-            if(item.symbol.includes('BTC')){
-                if(item.symbol.split('BTC')[0] !== '') {
-                    setFilterTakePairCoins((prev) => [...prev,
-                        {
-                            coin: item.symbol.split('BTC')[0],
-                            symbol: 'BTC',
-                            price: +item.price
-                        }
-                    ]);
-                }
-            }
+            // if(item.symbol.includes('BTC')){
+            //     if(item.symbol.split('BTC')[0] !== '') {
+            //         setFilterTakePairCoins((prev) => [...prev,
+            //             {
+            //                 coin: item.symbol.split('BTC')[0],
+            //                 symbol: 'BTC',
+            //                 price: +item.price
+            //             }
+            //         ]);
+            //     }
+            // }
         });
     }, [coins]);
 
-    useEffect(() => {
-        setResult([]);
-        filterTakePairCoins.forEach((itemPairCoin) => {
-            const coinItem = filterCoins.find(item => item.coin === itemPairCoin.coin);
+    // useEffect(() => {
+    //     setResult([]);
+    //     filterTakePairCoins.forEach((itemPairCoin) => {
+    //         const coinItem = filterCoins.find(item => item.coin === itemPairCoin.coin);
+    //         if(coinItem){
+    //             const percent: number = ((((coinItem.count * itemPairCoin.price) * ((+coinsPair[0].price*(100 + 5 - 2))/100)) * 100) / 500) - 100;
+    //             if(percent > 0) {
+    //                 setResult((prev) => [...prev,
+    //                     {
+    //                         symbol: coinItem.coin,
+    //                         priceBtc: (coinItem.count * itemPairCoin.price) * ((+coinsPair[0].price*(100 + 5 - 2))/100),
+    //                         // priceEth: (coinItem.count * itemPairCoin.price) * +coinsPair[1].price,
+    //                         //priceBnb: (coinItem.count * itemPairCoin.price) * +coinsPair[2].price
+    //                         percent: percent
+    //                     }
+    //                 ])
+    //             }
+    //         }
+    //     });
+    // }, [filterTakePairCoins])
 
-            if(coinItem){
-                const percent: number = ((((coinItem.count * itemPairCoin.price) * ((+coinsPair[0].price*(100 + 5 - 2))/100)) * 100) / 500) - 100;
-                if(percent > 0) {
-                    setResult((prev) => [...prev,
-                        {
-                            symbol: coinItem.coin,
-                            priceBtc: (coinItem.count * itemPairCoin.price) * ((+coinsPair[0].price*(100 + 5 - 2))/100),
-                            // priceEth: (coinItem.count * itemPairCoin.price) * +coinsPair[1].price,
-                            //priceBnb: (coinItem.count * itemPairCoin.price) * +coinsPair[2].price
-                            percent: percent
-                        }
-                    ])
-                }
-            }
-        });
-    }, [filterTakePairCoins])
+    // console.log('filterCoins=>', filterCoins);
 
       //console.log('coins=>', coins);
       //console.log('coinsPair=>', coinsPair);
-     //console.log('filterCoins=>', filterCoins);
      //console.log('filterTakePairCoins=>', filterTakePairCoins);
 
-    console.log('result=>', result);
+    //console.log('result=>', result);
 
     return (
         <div>

@@ -7,7 +7,6 @@ export interface CoinsAttr {
     symbol: string;
     price: number;
     coin: string;
-    count: number;
 }
 
 export interface CoinsResult {
