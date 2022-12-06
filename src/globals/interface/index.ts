@@ -10,11 +10,11 @@ export interface CoinsAttr {
 }
 
 export interface CoinsResult {
-    symbol: string;
-    priceBtc: number;
-   // priceEth: number;
-    //priceBnb: number;
-    percent: number;
+    coin: string;
+    BNB:number;
+    USDT: number;
+    ETH: number;
+    BTC: number;
 }
 
 export type Coins = Omit<CoinsAttr, 'count'>;
