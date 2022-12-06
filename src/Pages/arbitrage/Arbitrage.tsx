@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {Coins, CoinsAttr, CoinsResult, DataCoins} from "../../globals/interface";
+import {CoinsAttr, CoinsResult, DataCoins} from "../../globals/interface";
 
 export const Arbitrage = () => {
     const [coins, setCoins] = useState<DataCoins[]>([]);
     const [coinsPair, setCoinsPair] = useState<DataCoins[]>([]);
     const [filterCoins, setFilterCoins]  = useState<CoinsAttr[]>([]);
-    const [filterTakePairCoins, setFilterTakePairCoins]  = useState<Coins[]>([]);
     const [result, setResult] = useState<CoinsResult[]>([]);
 
     const formattedCoins = (wallet:CoinsAttr[]) => {
@@ -15,14 +14,38 @@ export const Arbitrage = () => {
             const currentSymbol = Object.values(i)[1];
             const idx = result.findIndex((el) => el.coin === i.coin);
             if (idx >= 0) {
+                //const percent: number = ((((coinItem.count * itemPairCoin.price) * ((+coinsPair[0].price*(100 + 5 - 2))/100)) * 100) / 500) - 100;
                 result[idx][currentSymbol] = i.price;
+                if(currentSymbol === 'USDT'){
+                    result[idx].count = 500/i.price;
+                }
+                if(currentSymbol === 'BTC'){
+                    result[idx].btcPrice = (result[idx].BTC * result[idx].count) * +coinsPair[0].price; //((+coinsPair[0].price*(100 + 5 - 2))/100) - увеличение процента продажи
+                }
+                if(currentSymbol === 'ETH'){
+                    result[idx].ethPrice = (result[idx].ETH * result[idx].count) * +coinsPair[1].price;
+                }
+                if(currentSymbol === 'BNB'){
+                    result[idx].bnbPrice = (result[idx].BNB * result[idx].count) * +coinsPair[2].price;
+                }
             } else {
-                result.push({ coin: i.coin, [currentSymbol]: i.price });
+                if(currentSymbol === 'USDT'){
+                    result.push({
+                        coin: i.coin,
+                        [currentSymbol]: i.price,
+                        count: 500/i.price
+                    });
+                } else {
+                    result.push({
+                        coin: i.coin,
+                        [currentSymbol]: i.price
+                    });
+                }
             }
         });
 
         return result;
-    };
+    }; //TODO fix  price2pair
 
     const getPair = (item:DataCoins) => {
         if(item.symbol === 'BTCUSDT' || item.symbol === 'ETHUSDT' || item.symbol === 'BNBUSDT'){
@@ -151,10 +174,7 @@ export const Arbitrage = () => {
     // }, []);
 
     useEffect(() => {
-        setFilterCoins([]);
         setCoinsPair([]);
-        setFilterTakePairCoins([]);
-
         coins.forEach((item:DataCoins) => {
             getPair(item);
             coinsArrayFilterAndSort(item);
@@ -162,29 +182,11 @@ export const Arbitrage = () => {
     }, [coins]);
 
     useEffect(() => {
-        setResult([]);
-        // filterTakePairCoins.forEach((itemPairCoin) => {
-        //     const coinItem = filterCoins.find(item => item.coin === itemPairCoin.coin);
-        //     if(coinItem){
-        //         const percent: number = ((((coinItem.count * itemPairCoin.price) * ((+coinsPair[0].price*(100 + 5 - 2))/100)) * 100) / 500) - 100;
-        //         if(percent > 0) {
-        //             setResult((prev) => [...prev,
-        //                 {
-        //                     symbol: coinItem.coin,
-        //                     priceBtc: (coinItem.count * itemPairCoin.price) * ((+coinsPair[0].price*(100 + 5 - 2))/100),
-        //                     // priceEth: (coinItem.count * itemPairCoin.price) * +coinsPair[1].price,
-        //                     //priceBnb: (coinItem.count * itemPairCoin.price) * +coinsPair[2].price
-        //                     percent: percent
-        //                 }
-        //             ])
-        //         }
-        //     }
-        // });
-        const res = formattedCoins(filterCoins)
+        const res = formattedCoins(filterCoins);
         setResult(res);
     }, [filterCoins])
 
-    console.log('result=>', result);
+     console.log('result=>', result);
 
     return (
         <div>

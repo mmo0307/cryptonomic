@@ -12,9 +12,13 @@ export interface CoinsAttr {
 export interface CoinsResult {
     coin: string;
     BNB:number;
+    bnbPrice:number;
     USDT: number;
     ETH: number;
+    ethPrice: number;
     BTC: number;
+    btcPrice:number
+    count: number;
 }
 
-export type Coins = Omit<CoinsAttr, 'count'>;
+
