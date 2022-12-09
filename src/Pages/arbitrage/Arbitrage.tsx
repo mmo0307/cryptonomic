@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import axios from "axios";
 import {CoinsAttr, CoinsResult, DataCoins} from "../../globals/interface";
 
@@ -8,52 +8,90 @@ export const Arbitrage = () => {
     const [filterCoins, setFilterCoins]  = useState<CoinsAttr[]>([]);
     const [result, setResult] = useState<CoinsResult[]>([]);
 
-    const formattedCoins = (wallet:CoinsAttr[]) => {
+    const formattedCoins = useCallback((wallet:CoinsAttr[]) => {
         const result:any[] = [];
-        wallet.forEach(i => {
-            const currentSymbol = Object.values(i)[1];
-            const idx = result.findIndex((el) => el.coin === i.coin);
+        wallet.forEach((item, _, selfWallet) => {
+            const currentSymbol = Object.values(item)[1];
+            const idx = result.findIndex((el) => el.coin === item.coin);
             if (idx >= 0) {
                 //const percent: number = ((((coinItem.count * itemPairCoin.price) * ((+coinsPair[0].price*(100 + 5 - 2))/100)) * 100) / 500) - 100;
-                result[idx][currentSymbol] = i.price;
+
                 if(currentSymbol === 'USDT'){
-                    result[idx].count = 500/i.price;
+                    result[idx].usdtPrice = item.price;
                 }
                 if(currentSymbol === 'BTC'){
-                    result[idx].btcPrice = (result[idx].BTC * result[idx].count) * +coinsPair[0].price; //((+coinsPair[0].price*(100 + 5 - 2))/100) - увеличение процента продажи
+                    result[idx][currentSymbol] = {
+                       price: item.price,
+                        btcPrice: (item.price * result[idx].count) * +coinsPair[0].price //((+coinsPair[0].price*(100 + 5 - 2))/100) - увеличение процента продажи
+                    };
                 }
                 if(currentSymbol === 'ETH'){
-                    result[idx].ethPrice = (result[idx].ETH * result[idx].count) * +coinsPair[1].price;
+                    result[idx][currentSymbol] = {
+                        price: item.price,
+                        ethPrice: (item.price * result[idx].count) * +coinsPair[1].price
+                    };
                 }
                 if(currentSymbol === 'BNB'){
-                    result[idx].bnbPrice = (result[idx].BNB * result[idx].count) * +coinsPair[2].price;
+                    result[idx][currentSymbol] = {
+                        price: item.price,
+                        bnbPrice: (item.price * result[idx].count) * +coinsPair[2].price
+                    };
                 }
             } else {
-                if(currentSymbol === 'USDT'){
-                    result.push({
-                        coin: i.coin,
-                        [currentSymbol]: i.price,
-                        count: 500/i.price
-                    });
-                } else {
-                    result.push({
-                        coin: i.coin,
-                        [currentSymbol]: i.price
-                    });
+                const tokenSymbolUSDT = selfWallet.filter((el) => el.coin === item.coin && el.symbol === 'USDT');
+
+                if(tokenSymbolUSDT.length) {
+                    if(item.symbol === 'USDT'){
+                        result.push({
+                            coin: item.coin,
+                            usdtPrice: tokenSymbolUSDT[0].price,
+                            count: 500 / tokenSymbolUSDT[0].price
+                        });
+                    }
+                    if(item.symbol === 'BTC'){
+                        result.push({
+                            coin: item.coin,
+                            [currentSymbol]: {
+                                price: item.price,
+                                btcPrice: (item.price * (500 / tokenSymbolUSDT[0].price)) * +coinsPair[0].price
+                            },
+                            count: 500 / tokenSymbolUSDT[0].price
+                        });
+                    }
+                    if(item.symbol === 'ETH'){
+                        result.push({
+                            coin: item.coin,
+                            [currentSymbol]: {
+                                price: item.price,
+                                ethPrice: (item.price * (500 / tokenSymbolUSDT[0].price)) * +coinsPair[0].price
+                            },
+                            count: 500 / tokenSymbolUSDT[0].price
+                        });
+                    }
+                    if(item.symbol === 'BNB'){
+                        result.push({
+                            coin: item.coin,
+                            [currentSymbol]: {
+                                price: item.price,
+                                bnbPrice: (item.price * (500 / tokenSymbolUSDT[0].price)) * +coinsPair[0].price
+                            },
+                            count: 500 / tokenSymbolUSDT[0].price
+                        });
+                    }
                 }
             }
         });
 
-        return result;
-    }; //TODO fix  price2pair
+        return result.filter(el => el.BTC || el.BNB || el.ETH);
+    }, []);
 
-    const getPair = (item:DataCoins) => {
+    const getPair = useCallback((item:DataCoins) => {
         if(item.symbol === 'BTCUSDT' || item.symbol === 'ETHUSDT' || item.symbol === 'BNBUSDT'){
             setCoinsPair((prev) => [...prev, item]);
         }
-    }
+    }, []);
 
-    const coinsArrayFilterAndSort = (item:DataCoins) => {
+    const coinsArrayFilterAndSort = useCallback((item:DataCoins) => {
         if(item.symbol.includes('USDT') ||
             item.symbol.includes('BTC') ||
             item.symbol.includes('BNB') ||
@@ -156,7 +194,7 @@ export const Arbitrage = () => {
 
             }
         }
-    }
+    }, []);
 
     useEffect(() => {
             axios.get('https://api1.binance.com/api/v3/ticker/price').then(response => {
@@ -164,14 +202,14 @@ export const Arbitrage = () => {
             });
     }, []);
 
-    // useEffect(() => {
-    //     const interval = setInterval(async () => {
-    //         const data = await axios.get('https://api1.binance.com/api/v3/ticker/price');
-    //         const response = await data.data;
-    //         filterFirstCoins(response);
-    //     }, 15*1000);
-    //     return () => clearInterval(interval);
-    // }, []);
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            const data = await axios.get('https://api1.binance.com/api/v3/ticker/price');
+            const response = await data.data;
+            setCoins(response);
+        }, 15*1000);
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         setCoinsPair([]);

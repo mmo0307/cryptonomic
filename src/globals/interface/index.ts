@@ -11,13 +11,19 @@ export interface CoinsAttr {
 
 export interface CoinsResult {
     coin: string;
-    BNB:number;
-    bnbPrice:number;
+    BNB:{
+        price: number;
+        bnbPrice:number;
+    };
     USDT: number;
-    ETH: number;
-    ethPrice: number;
-    BTC: number;
-    btcPrice:number
+    ETH: {
+        price: number;
+        ethPrice:number;
+    };
+    BTC: {
+        price: number;
+        btcPrice:number;
+    };
     count: number;
 }
 
