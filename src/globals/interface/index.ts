@@ -1,6 +1,6 @@
 export interface DataCoins {
     symbol: string;
-    price: string;
+    price: number;
 }
 
 export interface CoinsAttr {
@@ -11,19 +11,19 @@ export interface CoinsAttr {
 
 export interface CoinsResult {
     coin: string;
-    BNB:{
+    BNB?:{
         price: number;
         bnbPrice:number;
     };
-    USDT: number;
-    ETH: {
+    ETH?: {
         price: number;
         ethPrice:number;
     };
-    BTC: {
+    BTC?: {
         price: number;
         btcPrice:number;
     };
+    usdtPrice: number;
     count: number;
 }
 

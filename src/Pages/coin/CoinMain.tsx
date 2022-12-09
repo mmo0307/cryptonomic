@@ -101,9 +101,9 @@ const CoinMain: React.FC = () => {
       </Container>
 
       {Loading}
-      {filteredCoins.map((data: DataItem, indx: number) => (
+      {filteredCoins.map((data: DataItem, index: number) => (
         <Coin
-          key={indx}
+          key={index}
           id={data.id}
           name={data.name}
           image={data.image}

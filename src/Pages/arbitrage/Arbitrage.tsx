@@ -1,12 +1,14 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import axios from "axios";
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import { nanoid } from 'nanoid'
 import {CoinsAttr, CoinsResult, DataCoins} from "../../globals/interface";
+import {BuyPrice, ItemPriceBlock, SellPrice, Wrapper, WrapperItem} from "./Arbitrage.styles";
+import {Skeleton} from "../../Component/Skeleton/Skeleton";
+
 
 export const Arbitrage = () => {
     const [coins, setCoins] = useState<DataCoins[]>([]);
     const [coinsPair, setCoinsPair] = useState<DataCoins[]>([]);
     const [filterCoins, setFilterCoins]  = useState<CoinsAttr[]>([]);
-    const [result, setResult] = useState<CoinsResult[]>([]);
 
     const formattedCoins = useCallback((wallet:CoinsAttr[]) => {
         const result:any[] = [];
@@ -22,19 +24,19 @@ export const Arbitrage = () => {
                 if(currentSymbol === 'BTC'){
                     result[idx][currentSymbol] = {
                        price: item.price,
-                        btcPrice: (item.price * result[idx].count) * +coinsPair[0].price //((+coinsPair[0].price*(100 + 5 - 2))/100) - увеличение процента продажи
+                        btcPrice: (item.price * result[idx].count) * coinsPair[0].price //((+coinsPair[0].price*(100 + 5 - 2))/100) - увеличение процента продажи
                     };
                 }
                 if(currentSymbol === 'ETH'){
                     result[idx][currentSymbol] = {
                         price: item.price,
-                        ethPrice: (item.price * result[idx].count) * +coinsPair[1].price
+                        ethPrice: (item.price * result[idx].count) * coinsPair[1].price
                     };
                 }
                 if(currentSymbol === 'BNB'){
                     result[idx][currentSymbol] = {
                         price: item.price,
-                        bnbPrice: (item.price * result[idx].count) * +coinsPair[2].price
+                        bnbPrice: (item.price * result[idx].count) * coinsPair[2].price
                     };
                 }
             } else {
@@ -63,7 +65,7 @@ export const Arbitrage = () => {
                             coin: item.coin,
                             [currentSymbol]: {
                                 price: item.price,
-                                ethPrice: (item.price * (500 / tokenSymbolUSDT[0].price)) * +coinsPair[0].price
+                                ethPrice: (item.price * (500 / tokenSymbolUSDT[0].price)) * +coinsPair[1].price
                             },
                             count: 500 / tokenSymbolUSDT[0].price
                         });
@@ -73,7 +75,7 @@ export const Arbitrage = () => {
                             coin: item.coin,
                             [currentSymbol]: {
                                 price: item.price,
-                                bnbPrice: (item.price * (500 / tokenSymbolUSDT[0].price)) * +coinsPair[0].price
+                                bnbPrice: (item.price * (500 / tokenSymbolUSDT[0].price)) * +coinsPair[2].price
                             },
                             count: 500 / tokenSymbolUSDT[0].price
                         });
@@ -83,15 +85,14 @@ export const Arbitrage = () => {
         });
 
         return result.filter(el => el.BTC || el.BNB || el.ETH);
-    }, []);
-
-    const getPair = useCallback((item:DataCoins) => {
-        if(item.symbol === 'BTCUSDT' || item.symbol === 'ETHUSDT' || item.symbol === 'BNBUSDT'){
-            setCoinsPair((prev) => [...prev, item]);
-        }
-    }, []);
+    }, [coinsPair]);
 
     const coinsArrayFilterAndSort = useCallback((item:DataCoins) => {
+        if(item.symbol === 'BTCUSDT' || item.symbol === 'ETHUSDT' || item.symbol === 'BNBUSDT'){
+            item.price = +item.price;
+            setCoinsPair((prev) => [...prev, item]);
+        }
+
         if(item.symbol.includes('USDT') ||
             item.symbol.includes('BTC') ||
             item.symbol.includes('BNB') ||
@@ -196,17 +197,121 @@ export const Arbitrage = () => {
         }
     }, []);
 
+    const resultView = useMemo(() => {
+        const res:CoinsResult[] = formattedCoins(filterCoins);
+        console.log('res=>', res);
+        return (
+            <Wrapper>
+                {res.length ? res.map((item) => (
+                    <WrapperItem key={nanoid()}>
+                        {item.BTC !== undefined ?
+                            <div>
+                                <p>{item.coin}</p>
+                                <div>
+                                    <p>Buy {item.coin}/USDT</p>
+                                    <ItemPriceBlock>
+                                        by course:<BuyPrice>{item.usdtPrice}</BuyPrice>
+                                    </ItemPriceBlock>
+                                </div>
+                                <div>
+                                    <p>Sell {item.coin}/BTC</p>
+                                    <ItemPriceBlock>
+                                        by course:<SellPrice>{item.BTC.price}</SellPrice>
+                                    </ItemPriceBlock>
+                                </div>
+                                <div>
+                                    <p>Sell BTC/USDT</p>
+                                    <ItemPriceBlock>
+                                        by course:<SellPrice>{coinsPair[0].price}</SellPrice>
+                                    </ItemPriceBlock>
+                                </div>
+                                <div>
+                                    <p>Profit:</p>
+                                    <p>{item.BTC.btcPrice}</p>
+                                </div>
+                            </div> : null}
+
+                        {item.ETH !== undefined ?
+                            <div>
+                                <p>{item.coin}</p>
+                                <div>
+                                    <p>Buy {item.coin}/USDT</p>
+                                    <ItemPriceBlock>
+                                        by course:<BuyPrice>{item.usdtPrice}</BuyPrice>
+                                    </ItemPriceBlock>
+                                </div>
+                                <div>
+                                    <p>Sell {item.coin}/ETH</p>
+                                    <ItemPriceBlock>
+                                        by course:<SellPrice>{item.ETH.price}</SellPrice>
+                                    </ItemPriceBlock>
+                                </div>
+                                <div>
+                                    <p>Sell ETH/USDT</p>
+                                    <ItemPriceBlock>
+                                        by course:<SellPrice>{coinsPair[1].price}</SellPrice>
+                                    </ItemPriceBlock>
+                                </div>
+                                <div>
+                                    <p>Profit:</p>
+                                    <p>{item.ETH.ethPrice}</p>
+                                </div>
+                            </div> : null}
+
+                        {item.BNB !== undefined ?
+                            <div>
+                                <p>{item.coin}</p>
+                                <div>
+                                    <p>Buy {item.coin}/USDT</p>
+                                    <ItemPriceBlock>
+                                        by course:<BuyPrice>{item.usdtPrice}</BuyPrice>
+                                    </ItemPriceBlock>
+                                </div>
+                                <div>
+                                    <p>Sell {item.coin}/BNB</p>
+                                    <ItemPriceBlock>
+                                        by course:<SellPrice>{item.BNB.price}</SellPrice>
+                                    </ItemPriceBlock>
+                                </div>
+                                <div>
+                                    <p>Sell BNB/USDT</p>
+                                    <ItemPriceBlock>
+                                        by course:<SellPrice>{coinsPair[2].price}</SellPrice>
+                                    </ItemPriceBlock>
+                                </div>
+                                <div>
+                                    <p>Profit:</p>
+                                    <p>{item.BNB.bnbPrice}</p>
+                                </div>
+                            </div> : null}
+
+                    </WrapperItem>
+                )) : <Skeleton />}
+            </Wrapper>
+        );
+    }, [coinsPair])
+
     useEffect(() => {
-            axios.get('https://api1.binance.com/api/v3/ticker/price').then(response => {
-                setCoins(response.data);
-            });
+        const abortController = new AbortController();
+        void async function fetchData() {
+            try {
+                const response = await fetch('https://api1.binance.com/api/v3/ticker/price');
+                const data = await response.json();
+                setCoins(data);
+            } catch (error) {
+                console.log('error', error);
+            }
+        }();
+        return () => {
+            abortController.abort();
+        };
     }, []);
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            const data = await axios.get('https://api1.binance.com/api/v3/ticker/price');
-            const response = await data.data;
-            setCoins(response);
+           const response = await fetch('https://api1.binance.com/api/v3/ticker/price');
+           const data = await response.json();
+           setCoins(data);
         }, 15*1000);
         return () => clearInterval(interval);
     }, []);
@@ -214,17 +319,9 @@ export const Arbitrage = () => {
     useEffect(() => {
         setCoinsPair([]);
         coins.forEach((item:DataCoins) => {
-            getPair(item);
             coinsArrayFilterAndSort(item);
         });
     }, [coins]);
-
-    useEffect(() => {
-        const res = formattedCoins(filterCoins);
-        setResult(res);
-    }, [filterCoins])
-
-     console.log('result=>', result);
 
     return (
         <div>
@@ -239,6 +336,7 @@ export const Arbitrage = () => {
                 <option value="high">High - Low</option>
                 <option value="low">Low - High</option>
             </select>
+            {resultView}
         </div>
     );
 };
