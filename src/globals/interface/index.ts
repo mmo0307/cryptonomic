@@ -9,20 +9,17 @@ export interface CoinsAttr {
     coin: string;
 }
 
+export interface CoinPairAttr {
+    price: number;
+    profitPrice:number;
+    percent:number;
+}
+
 export interface CoinsResult {
     coin: string;
-    BNB?:{
-        price: number;
-        bnbPrice:number;
-    };
-    ETH?: {
-        price: number;
-        ethPrice:number;
-    };
-    BTC?: {
-        price: number;
-        btcPrice:number;
-    };
+    BNB?:CoinPairAttr;
+    ETH?: CoinPairAttr;
+    BTC?: CoinPairAttr;
     usdtPrice: number;
     count: number;
 }

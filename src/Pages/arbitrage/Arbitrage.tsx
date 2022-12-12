@@ -1,11 +1,25 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import { nanoid } from 'nanoid'
 import {CoinsAttr, CoinsResult, DataCoins} from "../../globals/interface";
-import {BuyPrice, ItemPriceBlock, SellPrice, Wrapper, WrapperItem} from "./Arbitrage.styles";
+import {
+    Block,
+    BuyPrice,
+    ContentBlock,
+    ContentWrapper, ContentWrapperBlock,
+    ItemBlock,
+    SellPrice,
+    Wrapper,
+    WrapperBlock,
+    WrapperItem
+} from "./Arbitrage.styles";
 import {Skeleton} from "../../Component/Skeleton/Skeleton";
 
 
-export const Arbitrage = () => {
+export const Arbitrage: React.FC = () => {
+    const comsa_1 = 0.002;
+    const comsa_2 = 0.001;
+    const [price, setPrice] = useState<number>(1000);
+    const [commission, setCommission] = useState<string>('0.2');
     const [coins, setCoins] = useState<DataCoins[]>([]);
     const [coinsPair, setCoinsPair] = useState<DataCoins[]>([]);
     const [filterCoins, setFilterCoins]  = useState<CoinsAttr[]>([]);
@@ -16,28 +30,50 @@ export const Arbitrage = () => {
             const currentSymbol = Object.values(item)[1];
             const idx = result.findIndex((el) => el.coin === item.coin);
             if (idx >= 0) {
-                //const percent: number = ((((coinItem.count * itemPairCoin.price) * ((+coinsPair[0].price*(100 + 5 - 2))/100)) * 100) / 500) - 100;
-
                 if(currentSymbol === 'USDT'){
                     result[idx].usdtPrice = item.price;
                 }
                 if(currentSymbol === 'BTC'){
-                    result[idx][currentSymbol] = {
-                       price: item.price,
-                        btcPrice: (item.price * result[idx].count) * coinsPair[0].price //((+coinsPair[0].price*(100 + 5 - 2))/100) - увеличение процента продажи
-                    };
+                    const firstCalculate = price / ((result[idx].usdtPrice * (100 - +commission)) / 100);
+                    const secondCalculate = firstCalculate * (item.price * comsa_1+ item.price);
+                    const thirdCalculate = secondCalculate * ((coinsPair[0].price * comsa_2) + coinsPair[0].price);
+                    const percentBTC: number = ((thirdCalculate * 100) / price) - 100;
+
+                    if(percentBTC > 0) {
+                        result[idx][currentSymbol] = {
+                            price: item.price,
+                            profitPrice: thirdCalculate.toFixed(2),
+                            percent: percentBTC
+                        };
+                    }
                 }
                 if(currentSymbol === 'ETH'){
-                    result[idx][currentSymbol] = {
-                        price: item.price,
-                        ethPrice: (item.price * result[idx].count) * coinsPair[1].price
-                    };
+                    const firstCalculate = price / ((result[idx].usdtPrice * (100 - +commission)) / 100);
+                    const secondCalculate = firstCalculate * (item.price * comsa_1+ item.price);
+                    const thirdCalculate = secondCalculate * ((coinsPair[1].price * comsa_2) + coinsPair[1].price);
+                    const percentETH: number = ((thirdCalculate * 100) / price) - 100;
+
+                    if(percentETH > 0) {
+                        result[idx][currentSymbol] = {
+                            price: item.price,
+                            profitPrice: thirdCalculate.toFixed(2),
+                            percent: percentETH
+                        };
+                    }
                 }
                 if(currentSymbol === 'BNB'){
-                    result[idx][currentSymbol] = {
-                        price: item.price,
-                        bnbPrice: (item.price * result[idx].count) * coinsPair[2].price
-                    };
+                    const firstCalculate = price / ((result[idx].usdtPrice * (100 - +commission)) / 100);
+                    const secondCalculate = firstCalculate * (item.price * comsa_1+ item.price);
+                    const thirdCalculate = secondCalculate * ((coinsPair[2].price * comsa_2) + coinsPair[2].price);
+                    const percentBNB: number = ((thirdCalculate * 100) / price) - 100;
+
+                    if(percentBNB>0) {
+                        result[idx][currentSymbol] = {
+                            price: item.price,
+                            profitPrice: thirdCalculate.toFixed(2),
+                            percent: percentBNB
+                        };
+                    }
                 }
             } else {
                 const tokenSymbolUSDT = selfWallet.filter((el) => el.coin === item.coin && el.symbol === 'USDT');
@@ -47,45 +83,69 @@ export const Arbitrage = () => {
                         result.push({
                             coin: item.coin,
                             usdtPrice: tokenSymbolUSDT[0].price,
-                            count: 500 / tokenSymbolUSDT[0].price
+                            count: price / tokenSymbolUSDT[0].price
                         });
                     }
                     if(item.symbol === 'BTC'){
-                        result.push({
-                            coin: item.coin,
-                            [currentSymbol]: {
-                                price: item.price,
-                                btcPrice: (item.price * (500 / tokenSymbolUSDT[0].price)) * +coinsPair[0].price
-                            },
-                            count: 500 / tokenSymbolUSDT[0].price
-                        });
+                        const firstCalculateBTC = price / ((tokenSymbolUSDT[0].price * (100 - +commission)) / 100);
+                        const secondCalculateBTC = firstCalculateBTC * (item.price * comsa_1+ item.price);
+                        const thirdCalculateBTC = secondCalculateBTC * ((coinsPair[0].price * comsa_2) + coinsPair[0].price);
+                        const percentBTC: number = ((thirdCalculateBTC * 100) / price) - 100;
+
+                        if(percentBTC>0) {
+                            result.push({
+                                coin: item.coin,
+                                [currentSymbol]: {
+                                    price: item.price,
+                                    profitPrice: thirdCalculateBTC.toFixed(2),
+                                    percent: percentBTC
+                                },
+                                count: price / tokenSymbolUSDT[0].price
+                            });
+                        }
                     }
                     if(item.symbol === 'ETH'){
-                        result.push({
-                            coin: item.coin,
-                            [currentSymbol]: {
-                                price: item.price,
-                                ethPrice: (item.price * (500 / tokenSymbolUSDT[0].price)) * +coinsPair[1].price
-                            },
-                            count: 500 / tokenSymbolUSDT[0].price
-                        });
+                        const firstCalculateETH = price / ((tokenSymbolUSDT[0].price * (100 - +commission)) / 100);
+                        const secondCalculateETH = firstCalculateETH * (item.price * comsa_1+ item.price);
+                        const thirdCalculateETH = secondCalculateETH * ((coinsPair[1].price * comsa_2) + coinsPair[1].price);
+                        const percentETH: number = ((thirdCalculateETH * 100) / price) - 100;
+
+                        if(percentETH>0) {
+                            result.push({
+                                coin: item.coin,
+                                [currentSymbol]: {
+                                    price: item.price,
+                                    profitPrice: thirdCalculateETH.toFixed(2),
+                                    percent: percentETH
+                                },
+                                count: price / tokenSymbolUSDT[0].price
+                            });
+                        }
                     }
                     if(item.symbol === 'BNB'){
-                        result.push({
-                            coin: item.coin,
-                            [currentSymbol]: {
-                                price: item.price,
-                                bnbPrice: (item.price * (500 / tokenSymbolUSDT[0].price)) * +coinsPair[2].price
-                            },
-                            count: 500 / tokenSymbolUSDT[0].price
-                        });
+                        const firstCalculateBNB = price / ((tokenSymbolUSDT[0].price * (100 - +commission)) / 100);
+                        const secondCalculateBNB = firstCalculateBNB * (item.price * comsa_1+ item.price);
+                        const thirdCalculateBNB = secondCalculateBNB * ((coinsPair[2].price * comsa_2) + coinsPair[2].price);
+                        const percentBNB: number = ((thirdCalculateBNB * 100) / price) - 100;
+
+                        if(percentBNB>0) {
+                            result.push({
+                                coin: item.coin,
+                                [currentSymbol]: {
+                                    price: item.price,
+                                    profitPrice: thirdCalculateBNB.toFixed(2),
+                                    percent: percentBNB
+                                },
+                                count: price / tokenSymbolUSDT[0].price
+                            });
+                        }
                     }
                 }
             }
         });
 
         return result.filter(el => el.BTC || el.BNB || el.ETH);
-    }, [coinsPair]);
+    }, [coinsPair, price, commission]);
 
     const coinsArrayFilterAndSort = useCallback((item:DataCoins) => {
         if(item.symbol === 'BTCUSDT' || item.symbol === 'ETHUSDT' || item.symbol === 'BNBUSDT'){
@@ -202,94 +262,107 @@ export const Arbitrage = () => {
         console.log('res=>', res);
         return (
             <Wrapper>
-                {res.length ? res.map((item) => (
-                    <WrapperItem key={nanoid()}>
-                        {item.BTC !== undefined ?
-                            <div>
-                                <p>{item.coin}</p>
-                                <div>
-                                    <p>Buy {item.coin}/USDT</p>
-                                    <ItemPriceBlock>
-                                        by course:<BuyPrice>{item.usdtPrice}</BuyPrice>
-                                    </ItemPriceBlock>
-                                </div>
-                                <div>
-                                    <p>Sell {item.coin}/BTC</p>
-                                    <ItemPriceBlock>
-                                        by course:<SellPrice>{item.BTC.price}</SellPrice>
-                                    </ItemPriceBlock>
-                                </div>
-                                <div>
-                                    <p>Sell BTC/USDT</p>
-                                    <ItemPriceBlock>
-                                        by course:<SellPrice>{coinsPair[0].price}</SellPrice>
-                                    </ItemPriceBlock>
-                                </div>
-                                <div>
-                                    <p>Profit:</p>
-                                    <p>{item.BTC.btcPrice}</p>
-                                </div>
-                            </div> : null}
+                <WrapperBlock>
+                    {res.length ? res.map((item) => (
+                        <>
+                            {item.BTC !== undefined ?
+                                <WrapperItem key={nanoid()}>
+                                    <p>{item.coin}</p>
+                                    <div>
+                                        <div>Buy {item.coin}/USDT</div>
+                                        <ItemBlock>
+                                            by course:<BuyPrice>{item.usdtPrice}</BuyPrice>
+                                        </ItemBlock>
+                                    </div>
+                                    <div>
+                                        <div>Sell {item.coin}/BTC</div>
+                                        <ItemBlock>
+                                            by course:<SellPrice>{item.BTC.price * comsa_1+ item.BTC.price}</SellPrice>
+                                        </ItemBlock>
+                                    </div>
+                                    <div>
+                                        <div>Sell BTC/USDT</div>
+                                        <ItemBlock>
+                                            by course:<SellPrice>{coinsPair[0].price * comsa_2 + coinsPair[0].price}</SellPrice>
+                                        </ItemBlock>
+                                    </div>
+                                    <ItemBlock>
+                                        <p>Profit:</p>
+                                        <p>{item.BTC.profitPrice}</p>
+                                    </ItemBlock>
+                                    <ItemBlock>
+                                        <p>Percent:</p>
+                                        <p>{item.BTC.percent.toFixed(2)}</p>
+                                    </ItemBlock>
+                                </WrapperItem> : null}
 
-                        {item.ETH !== undefined ?
-                            <div>
-                                <p>{item.coin}</p>
-                                <div>
-                                    <p>Buy {item.coin}/USDT</p>
-                                    <ItemPriceBlock>
-                                        by course:<BuyPrice>{item.usdtPrice}</BuyPrice>
-                                    </ItemPriceBlock>
-                                </div>
-                                <div>
-                                    <p>Sell {item.coin}/ETH</p>
-                                    <ItemPriceBlock>
-                                        by course:<SellPrice>{item.ETH.price}</SellPrice>
-                                    </ItemPriceBlock>
-                                </div>
-                                <div>
-                                    <p>Sell ETH/USDT</p>
-                                    <ItemPriceBlock>
-                                        by course:<SellPrice>{coinsPair[1].price}</SellPrice>
-                                    </ItemPriceBlock>
-                                </div>
-                                <div>
-                                    <p>Profit:</p>
-                                    <p>{item.ETH.ethPrice}</p>
-                                </div>
-                            </div> : null}
+                            {item.ETH !== undefined ?
+                                <WrapperItem key={nanoid()}>
+                                    <p>{item.coin}</p>
+                                    <div>
+                                        <div>Buy {item.coin}/USDT</div>
+                                        <ItemBlock>
+                                            by course:<BuyPrice>{item.usdtPrice}</BuyPrice>
+                                        </ItemBlock>
+                                    </div>
+                                    <div>
+                                        <div>Sell {item.coin}/ETH</div>
+                                        <ItemBlock>
+                                            by course:<SellPrice>{item.ETH.price * comsa_1+ item.ETH.price}</SellPrice>
+                                        </ItemBlock>
+                                    </div>
+                                    <div>
+                                        <div>Sell ETH/USDT</div>
+                                        <ItemBlock>
+                                            by course:<SellPrice>{coinsPair[1].price * comsa_2 + coinsPair[1].price}</SellPrice>
+                                        </ItemBlock>
+                                    </div>
+                                    <ItemBlock>
+                                        <p>Profit:</p>
+                                        <p>{item.ETH.profitPrice}</p>
+                                    </ItemBlock>
+                                    <ItemBlock>
+                                        <p>Percent:</p>
+                                        <p>{item.ETH.percent.toFixed(2)}</p>
+                                    </ItemBlock>
+                                </WrapperItem> : null}
 
-                        {item.BNB !== undefined ?
-                            <div>
-                                <p>{item.coin}</p>
-                                <div>
-                                    <p>Buy {item.coin}/USDT</p>
-                                    <ItemPriceBlock>
-                                        by course:<BuyPrice>{item.usdtPrice}</BuyPrice>
-                                    </ItemPriceBlock>
-                                </div>
-                                <div>
-                                    <p>Sell {item.coin}/BNB</p>
-                                    <ItemPriceBlock>
-                                        by course:<SellPrice>{item.BNB.price}</SellPrice>
-                                    </ItemPriceBlock>
-                                </div>
-                                <div>
-                                    <p>Sell BNB/USDT</p>
-                                    <ItemPriceBlock>
-                                        by course:<SellPrice>{coinsPair[2].price}</SellPrice>
-                                    </ItemPriceBlock>
-                                </div>
-                                <div>
-                                    <p>Profit:</p>
-                                    <p>{item.BNB.bnbPrice}</p>
-                                </div>
-                            </div> : null}
-
-                    </WrapperItem>
-                )) : <Skeleton />}
+                            {item.BNB !== undefined ?
+                                <WrapperItem key={nanoid()}>
+                                    <p>{item.coin}</p>
+                                    <div>
+                                        <div>Buy {item.coin}/USDT</div>
+                                        <ItemBlock>
+                                            by course:<BuyPrice>{item.usdtPrice}</BuyPrice>
+                                        </ItemBlock>
+                                    </div>
+                                    <div>
+                                        <div>Sell {item.coin}/BNB</div>
+                                        <ItemBlock>
+                                            by course:<SellPrice>{item.BNB.price * comsa_1+ item.BNB.price}</SellPrice>
+                                        </ItemBlock>
+                                    </div>
+                                    <div>
+                                        <div>Sell BNB/USDT</div>
+                                        <ItemBlock>
+                                            by course:<SellPrice>{coinsPair[2].price * comsa_2 + coinsPair[2].price}</SellPrice>
+                                        </ItemBlock>
+                                    </div>
+                                    <ItemBlock>
+                                        <p>Profit:</p>
+                                        <p>{item.BNB.profitPrice}</p>
+                                    </ItemBlock>
+                                    <ItemBlock>
+                                        <p>Percent:</p>
+                                        <p>{item.BNB.percent.toFixed(2)}</p>
+                                    </ItemBlock>
+                                </WrapperItem> : null}
+                        </>
+                    )) : <Skeleton />}
+                </WrapperBlock>
             </Wrapper>
         );
-    }, [coinsPair])
+    }, [coinsPair, price, commission])
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -309,9 +382,13 @@ export const Arbitrage = () => {
 
     useEffect(() => {
         const interval = setInterval(async () => {
-           const response = await fetch('https://api1.binance.com/api/v3/ticker/price');
-           const data = await response.json();
-           setCoins(data);
+            try {
+               const response = await fetch('https://api1.binance.com/api/v3/ticker/price');
+               const data = await response.json();
+               setCoins(data);
+            } catch (error) {
+                console.log('error', error);
+            }
         }, 15*1000);
         return () => clearInterval(interval);
     }, []);
@@ -324,19 +401,38 @@ export const Arbitrage = () => {
     }, [coins]);
 
     return (
-        <div>
-            <p>Transaction amount (USDT)</p>
-            <input type="text" placeholder="amount"/>
-            <p>Exchange commission (%)</p>
-            <input type="text" placeholder="commission"/>
-            <p>Show more (%)</p>
-            <input type="text" placeholder="percent"/>
-            <p>Sort by</p>
-            <select name="" id="">
-                <option value="high">High - Low</option>
-                <option value="low">Low - High</option>
-            </select>
+        <>
+            <ContentWrapperBlock>
+                <ContentWrapper>
+                    <ContentBlock>
+                        <Block>
+                            <p>Transaction amount (USDT)</p>
+                            <input type="text" placeholder="amount" value={price}  onChange={(e) => setPrice(+e.target.value)}/>
+                        </Block>
+                        <Block>
+                            <p>Exchange commission (%)</p>
+                            <input type="text" placeholder="commission" value={commission} onChange={(e) => {
+                                console.log('e.target.value=>', e.target.value);
+                                setCommission(e.target.value)
+                            }}/>
+                        </Block>
+                    </ContentBlock>
+                    <ContentBlock>
+                        <Block>
+                            <p>Show more (%)</p>
+                            <input type="text" placeholder="percent" value={0}/>
+                        </Block>
+                        <Block>
+                            <p>Sort by</p>
+                            <select name="" id="">
+                                <option value="high">High - Low</option>
+                                <option value="low">Low - High</option>
+                            </select>
+                        </Block>
+                    </ContentBlock>
+                </ContentWrapper>
+            </ContentWrapperBlock>
             {resultView}
-        </div>
+        </>
     );
 };
