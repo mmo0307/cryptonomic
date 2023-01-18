@@ -24,4 +24,24 @@ export interface CoinsResult {
     count: number;
 }
 
+type DataCoin = {
+    coin: string;
+    price: number;
+    percent?: number;
+    profitPrice?: string;
+    strategy?: {
+        buyCoin: number,
+        sellPairCoin: number,
+        sellPairUsdt: number
+    }
+}
+
+export interface CoinRes {
+    USDT: DataCoin[],
+    BTC: DataCoin[],
+    ETH: DataCoin[],
+    BNB:DataCoin[],
+    [key: string]: DataCoin[];
+}
+
 

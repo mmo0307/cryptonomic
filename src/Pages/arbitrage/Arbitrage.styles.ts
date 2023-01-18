@@ -84,3 +84,11 @@ export const Block = styled.div`
         }
       }
   `;
+
+export const ContentPair = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 150px;
+    gap: 5px;
+`;
