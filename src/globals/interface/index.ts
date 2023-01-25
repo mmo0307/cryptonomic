@@ -9,27 +9,15 @@ export interface CoinsAttr {
     coin: string;
 }
 
-export interface CoinPairAttr {
-    price: number;
-    profitPrice:number;
-    percent:number;
-}
-
-export interface CoinsResult {
-    coin: string;
-    BNB?:CoinPairAttr;
-    ETH?: CoinPairAttr;
-    BTC?: CoinPairAttr;
-    usdtPrice: number;
-    count: number;
-}
-
-type DataCoin = {
+export interface DataCoin {
     coin: string;
     price: number;
-    percent?: number;
-    profitPrice?: string;
-    strategy?: {
+}
+
+export interface ResultCoins extends DataCoin{
+    percent: number;
+    profitPrice: string;
+    strategy: {
         buyCoin: number,
         sellPairCoin: number,
         sellPairUsdt: number
@@ -37,11 +25,10 @@ type DataCoin = {
 }
 
 export interface CoinRes {
-    USDT: DataCoin[],
-    BTC: DataCoin[],
-    ETH: DataCoin[],
-    BNB:DataCoin[],
-    [key: string]: DataCoin[];
+    USDT: ResultCoins[],
+    BTC: ResultCoins[],
+    ETH: ResultCoins[],
+    BNB: ResultCoins[]
 }
 
 

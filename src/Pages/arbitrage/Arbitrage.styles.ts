@@ -59,7 +59,7 @@ export const ContentBlock = styled.div`
 export const Block = styled.div`
     padding: 0 0 10px 0;
   
-      input[type="text"] {
+      input{
         padding: 5px;
         border: none;
         color: gray;

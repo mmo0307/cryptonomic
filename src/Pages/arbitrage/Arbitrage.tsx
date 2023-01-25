@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {CoinRes, CoinsAttr, DataCoins} from "../../globals/interface";
+import {CoinRes, CoinsAttr, DataCoins, ResultCoins} from "../../globals/interface";
 import {
     Block, BuyPrice,
     ContentBlock, ContentPair,
@@ -20,11 +20,13 @@ export const Arbitrage: React.FC = () => {
     const [commission, setCommission] = useState<string>('0.2');
     const [coins, setCoins] = useState<DataCoins[]>([]);
     const [coinsPair, setCoinsPair] = useState<DataCoins[]>([]);
-    const [filterCoins, setFilterCoins]  = useState<CoinsAttr[]>([]);
+    const [filterCoins, setFilterCoins] = useState<CoinsAttr[]>([]);
     //TODO change pair coin
     const [pair, setPair] = useState<string>("BTC");
+    const [percentShow, setPercentShow] = useState<number>(0);
+    const [sortParam, setSortParam] = useState<string>("low");
 
-    const formattedCoins = useCallback((wallet:CoinsAttr[]) => {
+    const formattedCoins = useCallback((wallet:CoinsAttr[], pairToCoin:DataCoins[], sort:string, percentView:number, priceInvesting:number) => {
         const result:CoinRes = {
             USDT: [],
             BTC: [],
@@ -39,85 +41,107 @@ export const Arbitrage: React.FC = () => {
                         result.USDT.push({
                             coin: item.coin,
                             price: item.price
-                        });
+                        } as ResultCoins);
                     }
                     if(item.symbol === 'BTC'){
                         result.BTC.push({
                             coin: item.coin,
                             price: item.price
-                        })
+                        } as ResultCoins);
                     }
                     if(item.symbol === 'ETH'){
                         result.ETH.push({
                             coin: item.coin,
                             price: item.price
-                        })
+                        } as ResultCoins);
                     }
                     if(item.symbol === 'BNB'){
                         result.BNB.push({
                             coin: item.coin,
                             price: item.price
-                        })
+                        } as ResultCoins);
                     }
                 }
         });
 
-        result.BTC.map((item) => {
-            const findElement = result.USDT.find(el => el.coin === item.coin);
-            if(findElement){
-                const firstCalculate = price / ((findElement.price * (100 - +commission)) / 100);
-                const secondCalculate = firstCalculate * (item.price * comsa_1 + item.price);
-                const thirdCalculate = secondCalculate * ((coinsPair[0].price * comsa_2) + coinsPair[0].price);
+        if(pairToCoin.length > 0) {
+            result.BTC.map((item) => {
+                const findElement = result.USDT.find(el => el.coin === item.coin);
+                if (findElement) {
+                    const firstCalculate = priceInvesting / ((findElement.price * (100 - +commission)) / 100);
+                    const secondCalculate = firstCalculate * (item.price * comsa_1 + item.price);
+                    const thirdCalculate = secondCalculate * ((pairToCoin[0].price * comsa_2) + pairToCoin[0].price);
 
-                item.percent = ((thirdCalculate * 100) / price) - 100;
-                item.profitPrice = thirdCalculate.toFixed(2);
+                    item.percent = ((thirdCalculate * 100) / priceInvesting) - 100;
+                    item.profitPrice = thirdCalculate.toFixed(2);
 
-                item.strategy = {
-                    buyCoin: findElement.price,
-                    sellPairCoin: item.price * comsa_1 + item.price,
-                    sellPairUsdt: coinsPair[0].price * comsa_2 + coinsPair[0].price
+                    item.strategy = {
+                        buyCoin: findElement.price,
+                        sellPairCoin: item.price * comsa_1 + item.price,
+                        sellPairUsdt: pairToCoin[0].price * comsa_2 + pairToCoin[0].price
+                    }
                 }
-            }
-        });
+            });
+            result.ETH.map((item) => {
+                const findElement = result.USDT.find(el => el.coin === item.coin);
+                if (findElement) {
+                    const firstCalculate = priceInvesting / ((findElement.price * (100 - +commission)) / 100);
+                    const secondCalculate = firstCalculate * (item.price * comsa_1 + item.price);
+                    const thirdCalculate = secondCalculate * ((pairToCoin[1].price * comsa_2) + pairToCoin[1].price);
 
-        result.ETH.map((item) => {
-            const findElement = result.USDT.find(el => el.coin === item.coin);
-            if(findElement){
-                const firstCalculate = price / ((findElement.price * (100 - +commission)) / 100);
-                const secondCalculate = firstCalculate * (item.price * comsa_1 + item.price);
-                const thirdCalculate = secondCalculate * ((coinsPair[1].price * comsa_2) + coinsPair[1].price);
+                    item.percent = ((thirdCalculate * 100) / priceInvesting) - 100;
+                    item.profitPrice = thirdCalculate.toFixed(2);
 
-                item.percent = ((thirdCalculate * 100) / price) - 100;
-                item.profitPrice = thirdCalculate.toFixed(2);
-
-                item.strategy = {
-                    buyCoin: findElement.price,
-                    sellPairCoin: item.price * comsa_1 + item.price,
-                    sellPairUsdt: coinsPair[1].price * comsa_2 + coinsPair[1].price
+                    item.strategy = {
+                        buyCoin: findElement.price,
+                        sellPairCoin: item.price * comsa_1 + item.price,
+                        sellPairUsdt: pairToCoin[1].price * comsa_2 + pairToCoin[1].price
+                    }
                 }
-            }
-        });
+            });
+            result.BNB.map((item) => {
+                const findElement = result.USDT.find(el => el.coin === item.coin);
+                if (findElement) {
+                    const firstCalculate = priceInvesting / ((findElement.price * (100 - +commission)) / 100);
+                    const secondCalculate = firstCalculate * (item.price * comsa_1 + item.price);
+                    const thirdCalculate = secondCalculate * ((pairToCoin[2].price * comsa_2) + pairToCoin[2].price);
 
-        result.BNB.map((item) => {
-            const findElement = result.USDT.find(el => el.coin === item.coin);
-            if(findElement){
-                const firstCalculate = price / ((findElement.price * (100 - +commission)) / 100);
-                const secondCalculate = firstCalculate * (item.price * comsa_1 + item.price);
-                const thirdCalculate = secondCalculate * ((coinsPair[2].price * comsa_2) + coinsPair[2].price);
+                    item.percent = ((thirdCalculate * 100) / priceInvesting) - 100;
+                    item.profitPrice = thirdCalculate.toFixed(2);
 
-                item.percent = ((thirdCalculate * 100) / price) - 100;
-                item.profitPrice = thirdCalculate.toFixed(2);
-
-                item.strategy = {
-                    buyCoin: findElement.price,
-                    sellPairCoin: item.price * comsa_1 + item.price,
-                    sellPairUsdt: coinsPair[2].price * comsa_2 + coinsPair[2].price
+                    item.strategy = {
+                        buyCoin: findElement.price,
+                        sellPairCoin: item.price * comsa_1 + item.price,
+                        sellPairUsdt: pairToCoin[2].price * comsa_2 + pairToCoin[2].price
+                    }
                 }
-            }
-        });
+            });
+
+            result.BTC = result.BTC.filter(item => item.percent > percentView).sort((a, b) => {
+                if (sort === 'high') {
+                    return b.percent - a.percent;
+                } else {
+                    return a.percent - b.percent;
+                }
+            });
+            result.ETH = result.ETH.filter(item => item.percent > percentView).sort((a, b) => {
+                if (sort === 'high') {
+                    return b.percent - a.percent;
+                } else {
+                    return a.percent - b.percent;
+                }
+            });
+            result.BNB = result.BNB.filter(item => item.percent > percentView).sort((a, b) => {
+                if (sort === 'high') {
+                    return b.percent - a.percent;
+                } else {
+                    return a.percent - b.percent;
+                }
+            });
+        }
 
         return result;
-    }, [coinsPair, price, commission]);
+    }, []);
 
     const coinsArrayFilterAndSort = useCallback((item:DataCoins) => {
         if(item.symbol === 'BTCUSDT' || item.symbol === 'ETHUSDT' || item.symbol === 'BNBUSDT'){
@@ -230,31 +254,30 @@ export const Arbitrage: React.FC = () => {
     }, []);
 
     const resultView = useMemo(() => {
-        const res:CoinRes = formattedCoins(filterCoins);
-        console.log(res);
+        const res:CoinRes = formattedCoins(filterCoins, coinsPair, sortParam, percentShow, price);
         return (
             <Wrapper>
                 <WrapperBlock>
-                    {res.BNB ?
-                        res.BNB.map(item =>
+                    {res.BTC ?
+                        res.BTC.map(item =>
                             <WrapperItem key={nanoid()}>
                                 <p>{item.coin}</p>
                                 <div>
                                      <div>Buy {item.coin}/USDT</div>
                                      <ItemBlock>
-                                        by course:<BuyPrice>{item.strategy?.buyCoin}</BuyPrice>
+                                        by course:<BuyPrice>{item.strategy.buyCoin}</BuyPrice>
                                      </ItemBlock>
                                  </div>
                                  <div>
-                                   <div>Sell {item.coin}/BNB</div>
+                                   <div>Sell {item.coin}/BTC</div>
                                     <ItemBlock>
-                                        by course:<SellPrice>{item.strategy?.sellPairCoin}</SellPrice>
+                                        by course:<SellPrice>{item.strategy.sellPairCoin}</SellPrice>
                                     </ItemBlock>
                                  </div>
                                  <div>
-                                     <div>Sell BNB/USDT</div>
+                                     <div>Sell BTC/USDT</div>
                                      <ItemBlock>
-                                         by course:<SellPrice>{item.strategy?.sellPairUsdt}</SellPrice>
+                                         by course:<SellPrice>{item.strategy.sellPairUsdt}</SellPrice>
                                      </ItemBlock>
                                  </div>
                                  <ItemBlock>
@@ -263,7 +286,7 @@ export const Arbitrage: React.FC = () => {
                                  </ItemBlock>
                                  <ItemBlock>
                                      <p>Percent:</p>
-                                     <p>{item.percent?.toFixed(2)}</p>
+                                     <p>{item.percent.toFixed(2)}</p>
                                  </ItemBlock>
                             </WrapperItem>
                         )
@@ -271,7 +294,7 @@ export const Arbitrage: React.FC = () => {
                 </WrapperBlock>
             </Wrapper>
         );
-    }, [coinsPair, price, commission])
+    }, [coinsPair, price, commission, sortParam, percentShow]);
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -321,33 +344,30 @@ export const Arbitrage: React.FC = () => {
                         </Block>
                         <Block>
                             <p>Exchange commission (%)</p>
-                            <input type="text" placeholder="commission" value={commission} onChange={(e) => {
-                                console.log('e.target.value=>', e.target.value);
-                                setCommission(e.target.value)
-                            }}/>
+                            <input type="text" placeholder="commission" value={commission} onChange={(e) => setCommission(e.target.value)}/>
                         </Block>
                     </ContentBlock>
                     <ContentBlock>
                         <Block>
                             <p>Show more (%)</p>
-                            <input type="text" placeholder="percent" value={0}/>
+                            <input type="number" placeholder="percent" step={0.1} value={percentShow} onChange={(e) => setPercentShow(+e.target.value)}/>
                         </Block>
                         <Block>
                             <p>Sort by</p>
-                            <select name="" id="">
-                                <option value="high">High - Low</option>
+                            <select name="" id="" onChange={(e) => setSortParam(e.target.value)}>
                                 <option value="low">Low - High</option>
+                                <option value="high">High - Low</option>
                             </select>
                         </Block>
                     </ContentBlock>
                     <ContentPair>
-                        <input type="radio" name="coin" value='BTC' onChange={(e) => setPair(e.target.value)}/>
+                        <input type="radio" name="coin" checked={pair === 'BTC'} value='BTC' onChange={(e) => setPair(e.target.value)}/>
                         <label htmlFor="">BTC</label>
 
-                        <input type="radio" name="coin"  value='BNB' onChange={(e) => setPair(e.target.value)}/>
+                        <input type="radio" name="coin" checked={pair === 'BNB'}  value='BNB' onChange={(e) => setPair(e.target.value)}/>
                         <label htmlFor="">BNB</label>
 
-                        <input type="radio" name="coin"  value='ETH' onChange={(e) => setPair(e.target.value)}/>
+                        <input type="radio" name="coin" checked={pair === 'ETH'}  value='ETH' onChange={(e) => setPair(e.target.value)}/>
                         <label htmlFor="">ETH</label>
                     </ContentPair>
                 </ContentWrapper>
