@@ -18,9 +18,9 @@ export interface ResultCoins extends DataCoin{
     percent: number;
     profitPrice: string;
     strategy: {
-        buyCoin: number,
-        sellPairCoin: number,
-        sellPairUsdt: number
+        buyCoin: number | string,
+        sellPairCoin: number | string,
+        sellPairUsdt: number | string
     }
 }
 
@@ -30,5 +30,3 @@ export interface CoinRes {
     ETH: ResultCoins[],
     BNB: ResultCoins[]
 }
-
-
