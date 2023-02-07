@@ -83,8 +83,7 @@ export const Arbitrage: React.FC = () => {
                 if (findElement) {
                     const firstCalculate = (priceInvesting / findElement.price) - (((priceInvesting / findElement.price) * commission) / 100);
                     const secondCalculate = (+firstCalculate.toFixed(2) * item.price) - (((firstCalculate * item.price) * commission) / 100);
-                    const thirdCalculate = +secondCalculate.toFixed(4) * pairToCoin[1].price;
-
+                    const thirdCalculate = (+secondCalculate.toFixed(3) * pairToCoin[1].price) - (((+secondCalculate.toFixed(3) * pairToCoin[2].price) * commission) / 100);
                     item.percent = ((thirdCalculate * 100) / priceInvesting) - 100;
                     item.profitPrice = thirdCalculate.toFixed(2);
 
@@ -100,7 +99,7 @@ export const Arbitrage: React.FC = () => {
                 if (findElement) {
                     const firstCalculate = (priceInvesting / findElement.price) - (((priceInvesting / findElement.price) * commission) / 100);
                     const secondCalculate = (+firstCalculate.toFixed(2) * item.price) - (((firstCalculate * item.price) * commission) / 100);
-                    const thirdCalculate = +secondCalculate.toFixed(3) * pairToCoin[2].price;
+                    const thirdCalculate = (+secondCalculate.toFixed(3) * pairToCoin[2].price) - (((+secondCalculate.toFixed(3) * pairToCoin[2].price) * commission) / 100);
 
                     item.percent = ((thirdCalculate * 100) / priceInvesting) - 100;
                     item.profitPrice = thirdCalculate.toFixed(2);
@@ -409,13 +408,6 @@ export const Arbitrage: React.FC = () => {
             coinsArrayFilterAndSort(item);
         });
     }, [coins]);
-
-    /*
-
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                const account = accounts[0];
-                console.log(account);
-     */
 
     return (
         <>
