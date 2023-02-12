@@ -1,15 +1,15 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import React from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import Plot from 'react-plotly.js';
 
-import star from "../../assets/images/star.png";
-import active_star from "../../assets/images/star_active.png";
-import info_button from "../../assets/images/info-button.svg";
+import star from '../../assets/images/star.png';
+import active_star from '../../assets/images/star_active.png';
+import info_button from '../../assets/images/info-button.svg';
 
-import { Skeleton } from "../Skeleton/Skeleton";
-import { Error } from "../Error/Error";
+import { Skeleton } from '../Skeleton/Skeleton';
+import { Error } from '../Error/Error';
 import {
   Container,
   InfoBlock,
@@ -37,8 +37,8 @@ import {
   PriceRangeBlock,
   PriceLowHigh,
   PriceTitle,
-  ContainerChart,
-} from "../CoinInfo/coinInfo.style";
+  ContainerChart
+} from '../CoinInfo/coinInfo.style';
 
 interface CommunityData {
   twitter_followers: number;
@@ -59,8 +59,8 @@ interface PriceData {
 }
 
 type Price = {
-  [key:number]: number;
-}
+  [key: number]: number;
+};
 
 interface MarketData {
   current_price: PriceData;
@@ -72,7 +72,7 @@ interface MarketData {
   total_supply: number;
   circulating_supply: number;
   sparkline_7d: {
-    price: Price[],
+    price: Price[];
   };
 }
 
@@ -80,7 +80,7 @@ interface Tickers {
   last: number;
   converted_volume: PriceData;
   last_traded_at: string;
-};
+}
 
 interface Data {
   name: string;
@@ -99,48 +99,48 @@ interface Data {
 
 const CoinInfo: React.FC = () => {
   const [data_coin, setData] = useState<Data>({
-    name: "",
-    categories: [""],
-    genesis_date: "",
-    last_updated: "",
-    market_cap_rank: "",
-    symbol: "",
-    block_time_in_minutes: "",
+    name: '',
+    categories: [''],
+    genesis_date: '',
+    last_updated: '',
+    market_cap_rank: '',
+    symbol: '',
+    block_time_in_minutes: '',
     image: {
-      large: "",
-      small: "",
-      thumb: "",
+      large: '',
+      small: '',
+      thumb: ''
     },
     community_data: {
-      twitter_followers: 0,
+      twitter_followers: 0
     },
     description: {
-      en: "",
+      en: ''
     },
     market_data: {
       current_price: {
-        usd: 0,
+        usd: 0
       },
       price_change_percentage_24h: 0,
       high_24h: {
-        usd: 0,
+        usd: 0
       },
       low_24h: {
-        usd: 0,
+        usd: 0
       },
       market_cap: {
-        usd: 0,
+        usd: 0
       },
       total_volume: {
-        usd: 0,
+        usd: 0
       },
       total_supply: 0,
       circulating_supply: 0,
       sparkline_7d: {
         price: []
-      },
+      }
     },
-    tickers: [],
+    tickers: []
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -148,20 +148,20 @@ const CoinInfo: React.FC = () => {
   let { id } = useParams<string>();
 
   useEffect(() => {
-      axios
-        .get(
-          `https://api.coingecko.com/api/v3/coins/${id}?tickers=true&market_data=true&community_data=true&developer_data=true&sparkline=true`
-        )
-        .then((res) => {
-          setData(res.data);
-        })
-        .catch(() => {
-          setError(true);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }, []);
+    axios
+      .get(
+        `https://api.coingecko.com/api/v3/coins/${id}?tickers=true&market_data=true&community_data=true&developer_data=true&sparkline=true`
+      )
+      .then(res => {
+        setData(res.data);
+      })
+      .catch(() => {
+        setError(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   return <View data={data_coin} loading={loading} error={error} />;
 };
@@ -169,7 +169,7 @@ const CoinInfo: React.FC = () => {
 const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
   loading,
   error,
-  data,
+  data
 }) => {
   const Loading = loading ? <Skeleton /> : null;
   const errorMessage = error ? <Error /> : null;
@@ -180,22 +180,22 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
     image,
     description,
     symbol,
-    market_data,
+    market_data
   } = data;
 
   const [active, setActive] = useState<boolean>(false);
 
-  const avgValue:number =
+  const avgValue: number =
     ((market_data.current_price.usd - market_data.low_24h.usd) /
       (market_data.low_24h.usd - market_data.high_24h.usd)) *
     100;
-  const percent:string = market_data.price_change_percentage_24h.toFixed(2);
-  const flag:boolean = +percent > 0;
+  const percent: string = market_data.price_change_percentage_24h.toFixed(2);
+  const flag: boolean = +percent > 0;
 
-  let x_lines:any[]= [];
-  let y_lines:any[] = [];
+  let x_lines: any[] = [];
+  let y_lines: any[] = [];
 
-  for(let key in market_data.sparkline_7d.price){
+  for (let key in market_data.sparkline_7d.price) {
     x_lines.push(key);
     y_lines.push(market_data.sparkline_7d.price[key]);
   }
@@ -209,9 +209,9 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
             <InfoBlock>
               <CoinTitleBlock>
                 <img
-                  style={{ marginRight: "0.5rem" }}
-                  src={image ? image.large : ""}
-                  alt="Coin"
+                  style={{ marginRight: '0.5rem' }}
+                  src={image ? image.large : ''}
+                  alt='Coin'
                   width={100}
                 />
                 <CoinTitle>
@@ -225,7 +225,7 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
                   <Star onClick={() => setActive(!active)}>
                     <img
                       src={active ? active_star : star}
-                      alt="Star"
+                      alt='Star'
                       width={30}
                     />
                   </Star>
@@ -235,7 +235,9 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
 
               <p>{symbol.toUpperCase()} PRICE</p>
               <BlockPrice>
-                <PriceParagraph>${market_data.current_price.usd}</PriceParagraph>
+                <PriceParagraph>
+                  ${market_data.current_price.usd}
+                </PriceParagraph>
                 <PercentParagraph flag={flag}>
                   {market_data.price_change_percentage_24h.toFixed(2)}%
                 </PercentParagraph>
@@ -250,7 +252,7 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
                 </div>
 
                 <InputPriceRange
-                  type="range"
+                  type='range'
                   onChange={() => console.log(Math.abs(avgValue))}
                   value={Math.abs(avgValue)}
                   min={market_data.low_24h.usd}
@@ -259,11 +261,11 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
 
                 <PriceLowHigh>
                   <p>
-                    Low {"$"}
+                    Low {'$'}
                     {market_data.low_24h.usd}
                   </p>
                   <p>
-                    High {"$"}
+                    High {'$'}
                     {market_data.high_24h.usd}
                   </p>
                 </PriceLowHigh>
@@ -272,7 +274,7 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
               <Block>
                 <div>
                   <CoinPriceVolumeInfo>
-                    Market Cap <img height={13} src={info_button} alt="" />
+                    Market Cap <img height={13} src={info_button} alt='' />
                   </CoinPriceVolumeInfo>
                   <CoinPriceVolume>
                     ${(market_data.market_cap.usd / 1000000000).toFixed(2)} B
@@ -281,27 +283,27 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
 
                 <div>
                   <CoinPriceVolumeInfo>
-                    Total Supply <img height={13} src={info_button} alt="" />
+                    Total Supply <img height={13} src={info_button} alt='' />
                   </CoinPriceVolumeInfo>
                   <CoinPriceVolume>
-                    ${(market_data.total_supply / 1000000).toFixed(4)}{" "}
+                    ${(market_data.total_supply / 1000000).toFixed(4)}{' '}
                     {symbol.toUpperCase()}
                   </CoinPriceVolume>
                 </div>
 
                 <div>
                   <CoinPriceVolumeInfo>
-                    Circ. Supply <img height={13} src={info_button} alt="" />
+                    Circ. Supply <img height={13} src={info_button} alt='' />
                   </CoinPriceVolumeInfo>
                   <CoinPriceVolume>
-                    ${(market_data.circulating_supply / 1000000).toFixed(4)}{" "}
+                    ${(market_data.circulating_supply / 1000000).toFixed(4)}{' '}
                     {symbol.toUpperCase()}
                   </CoinPriceVolume>
                 </div>
 
                 <div>
                   <CoinPriceVolumeInfo>
-                    Volume 24h <img height={13} src={info_button} alt="" />
+                    Volume 24h <img height={13} src={info_button} alt='' />
                   </CoinPriceVolumeInfo>
                   <CoinPriceVolume>
                     ${(market_data.total_volume.usd / 1000000000).toFixed(2)} B
@@ -312,15 +314,15 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
             <MediaBlock>
               <Title>About {symbol.toUpperCase()}</Title>
               <DescriptionCoin>
-                {description && description.en !== ""
-                  ? description.en.substr(0, 200) + "..."
-                  : ""}
+                {description && description.en !== ''
+                  ? description.en.substr(0, 200) + '...'
+                  : ''}
               </DescriptionCoin>
-              {description && description.en === "" ? null : (
+              {description && description.en === '' ? null : (
                 <ReadMore>Read more</ReadMore>
               )}
-              <Title mt="10px">Tags</Title>
-              <Categories>{categories.map((cat) => cat + '; ')}</Categories>
+              <Title mt='10px'>Tags</Title>
+              <Categories>{categories.map(cat => cat + '; ')}</Categories>
             </MediaBlock>
           </Container>
 
@@ -332,11 +334,11 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
                   y: y_lines,
                   type: 'scatter',
                   mode: 'lines+markers',
-                  marker: {color: 'red'},
-                },
+                  marker: { color: 'red' }
+                }
                 //{type: 'bar', x: x_bar, y: y_bar},
               ]}
-              layout={ {width: 800, height: 600, title: name} }
+              layout={{ width: 800, height: 600, title: name }}
             />
           </ContainerChart>
         </>
