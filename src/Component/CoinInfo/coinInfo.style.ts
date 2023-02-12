@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 //import { deviceMax } from "../../globals/styles/constants/device";
 
 const Container = styled.div`
@@ -16,7 +16,7 @@ const Paragraph = styled.p`
 const Title = styled(Paragraph)<{
   mt?: string;
 }>`
-  margin-top: ${({ mt }) => mt ?? ""};
+  margin-top: ${({ mt }) => mt ?? ''};
   font-weight: 700;
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -131,8 +131,8 @@ const PercentParagraph = styled(Paragraph)<{
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.75rem;
-  background: ${({flag}) => flag ? '#25582b' : '#dc262640'};
-  color: ${({flag}) => flag ? '#0ffb00' : '#ef4444'};
+  background: ${({ flag }) => (flag ? '#25582b' : '#dc262640')};
+  color: ${({ flag }) => (flag ? '#0ffb00' : '#ef4444')};
   border-radius: 0.5rem;
   padding: 0.25rem 0.5rem;
 `;
@@ -151,7 +151,7 @@ const InputPriceRange = styled.input`
   height: 0.5rem;
   width: 60%;
   border-radius: 0.25rem;
-  background: ${(props) =>
+  background: ${props =>
     `linear-gradient(to right, #34FF61 0%, #34FF61 ${props.value}%, #2E2E34 ${props.value}%, #2E2E34 100%);`};
 
   ::-webkit-slider-thumb {
@@ -186,31 +186,31 @@ const ContainerChart = styled.div`
 `;
 
 export {
-  Container,
-  InfoBlock,
-  MediaBlock,
-  DescriptionCoin,
-  Categories,
-  Title,
-  CoinTitleBlock,
-  CoinTitle,
-  CoinName,
-  Rank,
-  Name,
-  Symbol,
-  CoinButton,
-  CoinButtonAttr,
-  Star,
-  ReadMore,
   Block,
   BlockPrice,
-  CoinPriceVolumeInfo,
+  Categories,
+  CoinButton,
+  CoinButtonAttr,
+  CoinName,
   CoinPriceVolume,
-  PercentParagraph,
-  PriceParagraph,
+  CoinPriceVolumeInfo,
+  CoinTitle,
+  CoinTitleBlock,
+  Container,
+  ContainerChart,
+  DescriptionCoin,
+  InfoBlock,
   InputPriceRange,
-  PriceRangeBlock,
+  MediaBlock,
+  Name,
+  PercentParagraph,
   PriceLowHigh,
+  PriceParagraph,
+  PriceRangeBlock,
   PriceTitle,
-  ContainerChart
+  Rank,
+  ReadMore,
+  Star,
+  Symbol,
+  Title
 };

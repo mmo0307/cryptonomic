@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Nav = styled.nav`
   padding: 0.5rem;
@@ -40,4 +40,4 @@ const Menu = styled.div`
   }
 `;
 
-export { Nav, Container, Menu };
+export { Container, Menu, Nav };
