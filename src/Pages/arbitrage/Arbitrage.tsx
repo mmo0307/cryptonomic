@@ -77,6 +77,7 @@ export const Arbitrage: React.FC = () => {
                         sellPairUsdt: pairToCoin[0].price.toFixed(2)
                     }
                 }
+                return item;
             });
             result.ETH.map((item) => {
                 const findElement = result.USDT.find(el => el.coin === item.coin);
@@ -93,6 +94,7 @@ export const Arbitrage: React.FC = () => {
                         sellPairUsdt: pairToCoin[1].price.toFixed(2)
                     }
                 }
+                return item;
             });
             result.BNB.map((item) => {
                 const findElement = result.USDT.find(el => el.coin === item.coin);
@@ -110,6 +112,7 @@ export const Arbitrage: React.FC = () => {
                         sellPairUsdt: pairToCoin[2].price.toFixed(1)
                     }
                 }
+                return item;
             });
 
             result.BTC = result.BTC.filter(item => item.percent > percentView).sort((a, b) => {

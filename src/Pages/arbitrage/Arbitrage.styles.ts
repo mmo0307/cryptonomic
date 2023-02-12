@@ -21,6 +21,20 @@ export const WrapperItem = styled.div`
   background: #3c3939;
   padding: 20px;
   border-radius: 20px;
+
+  @media screen and (max-width: 1440px){
+    gap: 0;
+  }
+
+  @media screen and (max-width: 850px){
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  @media screen and (max-width: 320px){
+    flex-direction: column;
+    gap: 28px;
+  }
 `;
 
 export const ItemBlock = styled.div`
@@ -48,6 +62,10 @@ export const ContentWrapper = styled.div`
   padding: 2.5em;
   background-color: #3c3939;
   border-radius: 20px;
+  
+  @media screen and (max-width: 850px){
+    flex-direction: column;
+  }
 `;
 
 export const ContentBlock = styled.div`
