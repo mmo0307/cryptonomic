@@ -1,10 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { nanoid } from 'nanoid';
+
+import { Skeleton } from '../../Component/Skeleton/Skeleton';
 import {
   CoinRes,
   CoinsAttr,
   DataCoins,
   ResultCoins
 } from '../../globals/interface';
+
 import {
   Block,
   BuyPrice,
@@ -18,8 +22,6 @@ import {
   WrapperBlock,
   WrapperItem
 } from './Arbitrage.styles';
-import { Skeleton } from '../../Component/Skeleton/Skeleton';
-import { nanoid } from 'nanoid';
 
 export const Arbitrage: React.FC = () => {
   const [price, setPrice] = useState<number>(1000);
@@ -47,7 +49,7 @@ export const Arbitrage: React.FC = () => {
       };
       wallet.forEach((item, _, selfWallet) => {
         const tokenSymbolUSDT = selfWallet.filter(
-          (el) => el.coin === item.coin && el.symbol === 'USDT'
+          el => el.coin === item.coin && el.symbol === 'USDT'
         );
 
         if (tokenSymbolUSDT[0]) {
@@ -79,8 +81,8 @@ export const Arbitrage: React.FC = () => {
       });
 
       if (pairToCoin.length > 0) {
-        result.BTC.map((item) => {
-          const findElement = result.USDT.find((el) => el.coin === item.coin);
+        result.BTC.map(item => {
+          const findElement = result.USDT.find(el => el.coin === item.coin);
           if (findElement) {
             const firstCalculate =
               priceInvesting / findElement.price -
@@ -101,8 +103,8 @@ export const Arbitrage: React.FC = () => {
             };
           }
         });
-        result.ETH.map((item) => {
-          const findElement = result.USDT.find((el) => el.coin === item.coin);
+        result.ETH.map(item => {
+          const findElement = result.USDT.find(el => el.coin === item.coin);
           if (findElement) {
             const firstCalculate =
               priceInvesting / findElement.price -
@@ -124,8 +126,8 @@ export const Arbitrage: React.FC = () => {
             };
           }
         });
-        result.BNB.map((item) => {
-          const findElement = result.USDT.find((el) => el.coin === item.coin);
+        result.BNB.map(item => {
+          const findElement = result.USDT.find(el => el.coin === item.coin);
           if (findElement) {
             const firstCalculate =
               priceInvesting / findElement.price -
@@ -149,33 +151,33 @@ export const Arbitrage: React.FC = () => {
           }
         });
 
-        result.BTC = result.BTC.filter(
-          (item) => item.percent > percentView
-        ).sort((a, b) => {
-          if (sort === 'high') {
-            return b.percent - a.percent;
-          } else {
-            return a.percent - b.percent;
+        result.BTC = result.BTC.filter(item => item.percent > percentView).sort(
+          (a, b) => {
+            if (sort === 'high') {
+              return b.percent - a.percent;
+            } else {
+              return a.percent - b.percent;
+            }
           }
-        });
-        result.ETH = result.ETH.filter(
-          (item) => item.percent > percentView
-        ).sort((a, b) => {
-          if (sort === 'high') {
-            return b.percent - a.percent;
-          } else {
-            return a.percent - b.percent;
+        );
+        result.ETH = result.ETH.filter(item => item.percent > percentView).sort(
+          (a, b) => {
+            if (sort === 'high') {
+              return b.percent - a.percent;
+            } else {
+              return a.percent - b.percent;
+            }
           }
-        });
-        result.BNB = result.BNB.filter(
-          (item) => item.percent > percentView
-        ).sort((a, b) => {
-          if (sort === 'high') {
-            return b.percent - a.percent;
-          } else {
-            return a.percent - b.percent;
+        );
+        result.BNB = result.BNB.filter(item => item.percent > percentView).sort(
+          (a, b) => {
+            if (sort === 'high') {
+              return b.percent - a.percent;
+            } else {
+              return a.percent - b.percent;
+            }
           }
-        });
+        );
       }
 
       return result;
@@ -190,7 +192,7 @@ export const Arbitrage: React.FC = () => {
       item.symbol === 'BNBUSDT'
     ) {
       item.price = +item.price;
-      setCoinsPair((prev) => [...prev, item]);
+      setCoinsPair(prev => [...prev, item]);
     }
 
     if (
@@ -205,7 +207,7 @@ export const Arbitrage: React.FC = () => {
         item.symbol.split('BNB')[0] !== '' ||
         item.symbol.split('ETH')[0] !== ''
       ) {
-        let pair: string = '';
+        let pair = '';
 
         if (item.symbol.split('USDT')[1] === '') {
           pair = 'USDT';
@@ -222,7 +224,7 @@ export const Arbitrage: React.FC = () => {
 
         switch (pair) {
           case 'USDT': {
-            setFilterCoins((prev) =>
+            setFilterCoins(prev =>
               [
                 ...prev,
                 {
@@ -243,7 +245,7 @@ export const Arbitrage: React.FC = () => {
             break;
           }
           case 'BTC': {
-            setFilterCoins((prev) =>
+            setFilterCoins(prev =>
               [
                 ...prev,
                 {
@@ -264,7 +266,7 @@ export const Arbitrage: React.FC = () => {
             break;
           }
           case 'BNB': {
-            setFilterCoins((prev) =>
+            setFilterCoins(prev =>
               [
                 ...prev,
                 {
@@ -285,7 +287,7 @@ export const Arbitrage: React.FC = () => {
             break;
           }
           case 'ETH': {
-            setFilterCoins((prev) =>
+            setFilterCoins(prev =>
               [
                 ...prev,
                 {
@@ -324,7 +326,7 @@ export const Arbitrage: React.FC = () => {
           <Wrapper>
             <WrapperBlock>
               {res.BTC ? (
-                res.BTC.map((item) => (
+                res.BTC.map(item => (
                   <WrapperItem key={nanoid()}>
                     <p>{item.coin}</p>
                     <div>
@@ -368,7 +370,7 @@ export const Arbitrage: React.FC = () => {
           <Wrapper>
             <WrapperBlock>
               {res.BNB ? (
-                res.BNB.map((item) => (
+                res.BNB.map(item => (
                   <WrapperItem key={nanoid()}>
                     <p>{item.coin}</p>
                     <div>
@@ -412,7 +414,7 @@ export const Arbitrage: React.FC = () => {
           <Wrapper>
             <WrapperBlock>
               {res.ETH ? (
-                res.ETH.map((item) => (
+                res.ETH.map(item => (
                   <WrapperItem key={nanoid()}>
                     <p>{item.coin}</p>
                     <div>
@@ -505,20 +507,20 @@ export const Arbitrage: React.FC = () => {
             <Block>
               <p>Transaction amount (USDT)</p>
               <input
-                type="number"
-                placeholder="amount"
+                type='number'
+                placeholder='amount'
                 step={100}
                 value={price}
-                onChange={(e) => setPrice(+e.target.value)}
+                onChange={e => setPrice(+e.target.value)}
               />
             </Block>
             <Block>
               <p>Exchange commission (%)</p>
               <input
-                type="number"
-                placeholder="commission"
+                type='number'
+                placeholder='commission'
                 value={commission}
-                onChange={(e) => setCommission(+e.target.value)}
+                onChange={e => setCommission(+e.target.value)}
               />
             </Block>
           </ContentBlock>
@@ -526,51 +528,51 @@ export const Arbitrage: React.FC = () => {
             <Block>
               <p>Show more (%)</p>
               <input
-                type="number"
-                placeholder="percent"
+                type='number'
+                placeholder='percent'
                 step={0.1}
                 value={percentShow}
-                onChange={(e) => setPercentShow(+e.target.value)}
+                onChange={e => setPercentShow(+e.target.value)}
               />
             </Block>
             <Block>
               <p>Sort by</p>
               <select
-                name="sort_by"
-                onChange={(e) => setSortParam(e.target.value)}
+                name='sort_by'
+                onChange={e => setSortParam(e.target.value)}
               >
-                <option value="low">Low - High</option>
-                <option value="high">High - Low</option>
+                <option value='low'>Low - High</option>
+                <option value='high'>High - Low</option>
               </select>
             </Block>
           </ContentBlock>
           <ContentPair>
             <input
-              type="radio"
-              name="coin"
+              type='radio'
+              name='coin'
               checked={pair === 'BTC'}
-              value="BTC"
-              onChange={(e) => setPair(e.target.value)}
+              value='BTC'
+              onChange={e => setPair(e.target.value)}
             />
-            <label htmlFor="">BTC</label>
+            <label htmlFor=''>BTC</label>
 
             <input
-              type="radio"
-              name="coin"
+              type='radio'
+              name='coin'
               checked={pair === 'BNB'}
-              value="BNB"
-              onChange={(e) => setPair(e.target.value)}
+              value='BNB'
+              onChange={e => setPair(e.target.value)}
             />
-            <label htmlFor="">BNB</label>
+            <label htmlFor=''>BNB</label>
 
             <input
-              type="radio"
-              name="coin"
+              type='radio'
+              name='coin'
               checked={pair === 'ETH'}
-              value="ETH"
-              onChange={(e) => setPair(e.target.value)}
+              value='ETH'
+              onChange={e => setPair(e.target.value)}
             />
-            <label htmlFor="">ETH</label>
+            <label htmlFor=''>ETH</label>
           </ContentPair>
         </ContentWrapper>
       </ContentWrapperBlock>

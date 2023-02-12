@@ -40,4 +40,4 @@ const Menu = styled.div`
   }
 `;
 
-export { Nav, Container, Menu };
+export { Container, Menu, Nav };

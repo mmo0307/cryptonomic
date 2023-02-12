@@ -1,44 +1,44 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
+import info_button from '../../assets/images/info-button.svg';
 import star from '../../assets/images/star.png';
 import active_star from '../../assets/images/star_active.png';
-import info_button from '../../assets/images/info-button.svg';
-
-import { Skeleton } from '../Skeleton/Skeleton';
 import { Error } from '../Error/Error';
+import { Skeleton } from '../Skeleton/Skeleton';
+
 import {
-  Container,
-  InfoBlock,
-  MediaBlock,
-  DescriptionCoin,
+  Block,
+  BlockPrice,
   Categories,
-  Title,
-  CoinTitleBlock,
-  CoinTitle,
-  CoinName,
-  Rank,
-  Name,
-  Symbol,
   CoinButton,
   CoinButtonAttr,
-  Star,
-  ReadMore,
-  Block,
+  CoinName,
   CoinPriceVolume,
   CoinPriceVolumeInfo,
-  BlockPrice,
-  PercentParagraph,
-  PriceParagraph,
+  CoinTitle,
+  CoinTitleBlock,
+  Container,
+  ContainerChart,
+  DescriptionCoin,
+  InfoBlock,
   InputPriceRange,
-  PriceRangeBlock,
+  MediaBlock,
+  Name,
+  PercentParagraph,
   PriceLowHigh,
+  PriceParagraph,
+  PriceRangeBlock,
   PriceTitle,
-  ContainerChart
-} from '../CoinInfo/coinInfo.style';
+  Rank,
+  ReadMore,
+  Star,
+  Symbol,
+  Title
+} from './coinInfo.style';
 
 interface CommunityData {
   twitter_followers: number;
@@ -145,7 +145,7 @@ const CoinInfo: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
-  let { id } = useParams<string>();
+  const { id } = useParams<string>();
 
   useEffect(() => {
     axios
@@ -192,10 +192,10 @@ const View: React.FC<{ loading: boolean; error: boolean; data: Data }> = ({
   const percent: string = market_data.price_change_percentage_24h.toFixed(2);
   const flag: boolean = +percent > 0;
 
-  let x_lines: any[] = [];
-  let y_lines: any[] = [];
+  const x_lines: any[] = [];
+  const y_lines: any[] = [];
 
-  for (let key in market_data.sparkline_7d.price) {
+  for (const key in market_data.sparkline_7d.price) {
     x_lines.push(key);
     y_lines.push(market_data.sparkline_7d.price[key]);
   }
