@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -17,10 +17,22 @@ export const WrapperItem = styled.div`
   align-items: center;
   justify-content: space-around;
   gap: 80px;
-  
+
   background: #3c3939;
   padding: 20px;
   border-radius: 20px;
+
+  @media screen and (max-width: 1440px) {
+    gap: 0;
+  }
+  @media screen and (max-width: 850px) {
+    flex-direction: column;
+    gap: 28px;
+  }
+  @media screen and (max-width: 320px) {
+    flex-direction: column;
+    gap: 28px;
+  }
 `;
 
 export const ItemBlock = styled.div`
@@ -48,6 +60,10 @@ export const ContentWrapper = styled.div`
   padding: 2.5em;
   background-color: #3c3939;
   border-radius: 20px;
+
+  @media screen and (max-width: 850px) {
+    flex-direction: column;
+  }
 `;
 
 export const ContentBlock = styled.div`
@@ -57,38 +73,38 @@ export const ContentBlock = styled.div`
 `;
 
 export const Block = styled.div`
-    padding: 0 0 10px 0;
-  
-      input{
-        padding: 5px;
-        border: none;
-        color: gray;
-        
-        &:focus {
-          outline: none;
-        }
-      }
-  
-      select {
-        color: gray;
-        border: none;
-        padding: 5px;
-        width: 100%;
-        
-        option {
-          color: gray;
-        }
+  padding: 0 0 10px 0;
 
-        &:focus {
-          outline: none;
-        }
-      }
-  `;
+  input {
+    padding: 5px;
+    border: none;
+    color: gray;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  select {
+    color: gray;
+    border: none;
+    padding: 5px;
+    width: 100%;
+
+    option {
+      color: gray;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+`;
 
 export const ContentPair = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 150px;
-    gap: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 150px;
+  gap: 5px;
 `;
