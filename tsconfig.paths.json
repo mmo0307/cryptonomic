@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@app/*": ["./*"],
+      "@redux/*": ["redux/*"],
+      "@selectors/*": ["redux/selectors/*"],
+      "@reducers/*": ["redux/reducers/*"],
+      "@api/*": ["redux/api/*"],
+      "@features/*": ["features/*"],
+      "@interface/*": ["models/Interface/*"],
+      "@type/*": ["models/Type/*"],
+      "@component/*": ["component/*"],
+      "@assets/*": ["assets/*"],
+      "@hooks/*": ["hooks/*"],
+      "@globals/*": ["globals/*"]
+    }
+  }
+}
