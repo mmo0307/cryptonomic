@@ -1,0 +1,31 @@
+@mixin not-last-child {
+  & > * {
+    &:not(:last-child) {
+      @content;
+    }
+  }
+}
+
+@mixin last-child {
+  & > * {
+    &:last-child {
+      @content;
+    }
+  }
+}
+
+@mixin not-first-child {
+  & > * {
+    &:not(:first-child) {
+      @content;
+    }
+  }
+}
+
+@mixin first-child {
+  & > * {
+    &:first-child {
+      @content;
+    }
+  }
+}

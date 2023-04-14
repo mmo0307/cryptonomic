@@ -1,0 +1,71 @@
+@mixin fixed-layout($columns, $width, $h-gap, $v-gap) {
+  display: grid;
+
+  grid-template-columns: repeat($columns, $width);
+
+  column-gap: $h-gap;
+
+  row-gap: $v-gap;
+}
+
+@mixin flex($j: flex-start, $a: center, $d: row) {
+  display: flex;
+  flex-direction: $d;
+  align-items: $a;
+  justify-content: $j;
+}
+
+@mixin size($size) {
+  width: $size;
+  height: $size;
+}
+
+@mixin min-size($size) {
+  min-width: $size;
+  min-height: $size;
+}
+
+@mixin max-size($size) {
+  max-width: $size;
+  max-height: $size;
+}
+
+@mixin strict-size($size) {
+  @include size($size);
+  @include min-size($size);
+  @include max-size($size);
+}
+
+@mixin mv($value) {
+  margin-top: $value;
+  margin-bottom: $value;
+}
+
+@mixin mh($value) {
+  margin-right: $value;
+  margin-left: $value;
+}
+
+@mixin pv($value) {
+  padding-top: $value;
+  padding-bottom: $value;
+}
+
+@mixin ph($value) {
+  padding-right: $value;
+  padding-left: $value;
+}
+
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin fixed-center() {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

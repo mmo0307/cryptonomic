@@ -1,0 +1,25 @@
+@mixin nowrap-overflow() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@mixin font($size, $weight, $height) {
+  font-weight: $weight;
+  font-size: $size;
+  line-height: $height;
+}
+
+.align {
+  &-left {
+    text-align: left;
+  }
+
+  &-center {
+    text-align: center;
+  }
+
+  &-right {
+    text-align: right;
+  }
+}

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@lottiefiles/react-lottie-player": "^3.5.3",
     "@reduxjs/toolkit": "^1.9.3",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
@@ -13,13 +14,15 @@
     "@types/react-dom": "^18.0.6",
     "@types/styled-components": "^5.1.25",
     "axios": "^0.27.2",
+    "classnames": "^2.3.2",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "ethers": "^5.7.2",
+    "lottie-react": "^2.4.0",
     "nanoid": "^4.0.0",
     "plotly.js": "^2.14.0",
+    "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-plotly.js": "^2.5.1",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
@@ -54,7 +57,6 @@
     ]
   },
   "devDependencies": {
-    "@types/react-plotly.js": "^2.5.1",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",
     "eslint": "^8.34.0",

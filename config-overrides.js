@@ -8,18 +8,14 @@ module.exports = function override(config) {
     ...config.resolve,
     alias: {
       ...config.resolve.alias,
-      '@app': resolvePath('src/'),
-      '@redux': resolvePath('src/redux/'),
-      '@selectors': resolvePath('src/redux/selectors/'),
-      '@reducers': resolvePath('src/redux/reducers/'),
-      '@api': resolvePath('src/redux/api/'),
+      '@root': resolvePath('src/'),
+      '@app': resolvePath('src/app/'),
+      '@component': resolvePath('src/app/core/component/'),
+      '@entities': resolvePath('src/entities/'),
       '@features': resolvePath('src/features/'),
-      '@interface': resolvePath('src/models/Interface/'),
-      '@type': resolvePath('src/models/Type/'),
-      '@component': resolvePath('src/component/'),
-      '@assets': resolvePath('src/assets/'),
-      '@hooks': resolvePath('src/hooks/'),
-      '@globals': resolvePath('src/globals/')
+      '@pages': resolvePath('src/pages/'),
+      '@shared': resolvePath('src/shared/'),
+      '@store': resolvePath('src/store/')
     },
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.d.ts']
   };
