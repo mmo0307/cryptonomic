@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Arrow } from '@shared/ui/assets/icons/Arrow';
 import fireData from '@shared/ui/assets/json_lottie_file/fire.json';
@@ -15,6 +15,16 @@ import {
 } from './Navbar.styles';
 
 const Navbar: React.FC = () => {
+  const [account, setAccount] = useState<string | null>(null);
+  const getAccount = async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      const accounts = await window.ethereum.request({
+        method: 'eth_requestAccounts'
+      });
+      setAccount(accounts[0]);
+    }
+  };
+
   return (
     <Nav>
       <Container>
@@ -79,7 +89,11 @@ const Navbar: React.FC = () => {
               <Link to='/'>Analytics(soon)</Link>
             </li>
           </ul>
-          <ConnectWallet>Connect wallet</ConnectWallet>
+          {account ? (
+            account.slice(0, 5) + '...' + account.slice(-4)
+          ) : (
+            <ConnectWallet onClick={getAccount}>Connect wallet</ConnectWallet>
+          )}
         </Menu>
       </Container>
     </Nav>
