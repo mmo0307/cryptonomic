@@ -5,14 +5,7 @@ import fireData from '@shared/ui/assets/json_lottie_file/fire.json';
 import logo from '@shared/ui/assets/svg/logo-cryptonomic.svg';
 import Lottie from 'lottie-react';
 
-import {
-  Block,
-  ConnectWallet,
-  Container,
-  DropDownBlock,
-  Menu,
-  Nav
-} from './Navbar.styles';
+import styles from './navbar.module.scss';
 
 const Navbar: React.FC = () => {
   const [account, setAccount] = useState<string | null>(null);
@@ -26,14 +19,14 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <Nav>
-      <Container>
+    <div className={styles.nav}>
+      <div className={styles.container}>
         <div>
           <Link to='/'>
             <img src={logo} alt='Logo' />
           </Link>
         </div>
-        <Menu>
+        <div className={styles.menu}>
           <ul>
             <li>
               <Link to='/'>Markets</Link>
@@ -50,10 +43,10 @@ const Navbar: React.FC = () => {
                 />
                 Themes
               </Link>
-              <DropDownBlock className='dropBlock'>
-                <Block>
+              <div className={styles.dropBlock}>
+                <div className={styles.block}>
                   <div>
-                    <p className='titleDrop'>Core</p>
+                    <p className={styles.titleDrop}>Core</p>
                     <ul>
                       <li>
                         <Link to='/arbitrage'>
@@ -66,7 +59,7 @@ const Navbar: React.FC = () => {
                   </div>
 
                   <div>
-                    <p className='titleDrop'>Products</p>
+                    <p className={styles.titleDrop}>Products</p>
                     <ul>
                       <li>Arbitrage</li>
                       <li>Pump (soon)</li>
@@ -75,28 +68,30 @@ const Navbar: React.FC = () => {
                   </div>
 
                   <div>
-                    <p className='titleDrop'>Links</p>
+                    <p className={styles.titleDrop}>Links</p>
                     <ul>
                       <li>Arbitrage</li>
                       <li>Pump (soon)</li>
                       <li>Pump (soon)</li>
                     </ul>
                   </div>
-                </Block>
-              </DropDownBlock>
+                </div>
+              </div>
             </li>
-            <li className='textDisable'>
+            <li className={styles.textDisable}>
               <Link to='/'>Analytics(soon)</Link>
             </li>
           </ul>
           {account ? (
             account.slice(0, 5) + '...' + account.slice(-4)
           ) : (
-            <ConnectWallet onClick={getAccount}>Connect wallet</ConnectWallet>
+            <button className={styles.connectWallet} onClick={getAccount}>
+              Connect wallet
+            </button>
           )}
-        </Menu>
-      </Container>
-    </Nav>
+        </div>
+      </div>
+    </div>
   );
 };
 

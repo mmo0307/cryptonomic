@@ -21,6 +21,7 @@ type Price = {
 };
 
 interface MarketData {
+  price_change_24h: number;
   current_price: PriceData;
   price_change_percentage_24h: number;
   price_change_percentage_7d: number;

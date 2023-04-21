@@ -48,10 +48,11 @@ const CoinMain: React.FC = () => {
       )
       .then(res => {
         setData(res.data);
-        setLoading(false);
       })
       .catch(() => {
         setError(true);
+      })
+      .finally(() => {
         setLoading(false);
       });
   };

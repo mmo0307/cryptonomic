@@ -1,11 +1,14 @@
-@import './normalize.scss';
-@import './reset.scss';
-@import './fonts.scss';
+@import './normalize';
+@import './reset';
+@import './fonts';
+@import './vars';
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Trebuchet MS', sans-serif;
 
-  background-color: #252525 !important;
+  font-style: normal;
+
+  background-color: $black-100 !important;
 }
 
 body::-webkit-scrollbar {
@@ -13,7 +16,7 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-track {
-  background: #1f1f1f; /* color of the tracking area */
+  background: $black-200; /* color of the tracking area */
 }
 
 body::-webkit-scrollbar-thumb {

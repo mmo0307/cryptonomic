@@ -1,3 +1,5 @@
+@import "src/app/styles/vars";
+
 .modal {
   height: 100vh;
   width: 100vw;
@@ -24,7 +26,7 @@
   min-height: 100px;
   padding: 20px;
   border-radius: 12px;
-  background-color: #2D2D2D;
+  background-color: $black-300;
   transform: scale(0.5);
   transition: 0.4s all;
 
@@ -41,7 +43,7 @@
     right: 20px;
     font-size: 1.8rem;
     cursor: pointer;
-    color: #e74c3c;
+    color: $red-100;
   }
 
   .modal_content_title {

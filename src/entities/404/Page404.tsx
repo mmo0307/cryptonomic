@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '@shared/ui/assets/svg/404.svg';
 
-import './404.scss';
+import './404.module.scss';
 
 const Page404 = () => {
   return (

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const CoinApp = styled.div`
   display: flex;
@@ -20,19 +20,19 @@ const CoinSearch = styled.div`
     text-align: center;
   }
 
-  & input{
+  & input {
     padding-left: 16px;
     width: 300px;
     height: 50px;
     border-radius: 4px;
-    border: 1px solid gray;
-    background-color: #1a1a1c;
+    border: 1px solid $gray;
+    background-color: $black-400;
   }
 
-  & input:focus{
+  & input:focus {
     outline: none;
     border: 1px solid white;
   }
 `;
 
-export {CoinApp, CoinSearch};
+export { CoinApp, CoinSearch };
