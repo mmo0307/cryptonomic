@@ -102,8 +102,6 @@
 
 .connectWallet {
   border: 1px solid $white-50;
-  border-radius: 4px;
-  padding: 8px 20.5px;
   background: none;
 
   font-style: normal;
@@ -115,9 +113,29 @@
   text-transform: uppercase;
   color: $white-50;
 
+  border-radius: 4px;
+  padding: 8px 20.5px;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+
+
   &:hover {
+    border: none;
     cursor: pointer;
-    background: $white-50 !important;
-    color: black;
+    color: $black;
+    -webkit-transform: translate(-0.25rem,-0.25rem);
+    -ms-transform: translate(-0.25rem,-0.25rem);
+    transform: translate(-0.25rem,-0.25rem);
+    background: $purple-50;
+    -webkit-box-shadow: 0.25rem 0.25rem $black;
+    box-shadow: 0.25rem 0.25rem $black;
+  }
+
+  &:active {
+    -webkit-transform: translate(0);
+    -ms-transform: translate(0);
+    transform: translate(0);
+    -webkit-box-shadow: none;
+    box-shadow: none;
   }
 }

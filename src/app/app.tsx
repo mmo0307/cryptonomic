@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { Navbar } from '@root/entities';
+import { Cookie, Navbar } from '@root/entities';
 import { AppRouter } from '@shared/routes';
 
 import './styles/index.scss';
@@ -10,6 +10,7 @@ export const App = () => {
     <Router>
       <Navbar />
       <AppRouter />
+      {/*<Cookie />*/}
     </Router>
   );
 };
