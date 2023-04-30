@@ -40,7 +40,6 @@ const FavoriteButton = () => {
           duration: 0.45,
           ease: 'power2.out',
           onStart() {
-            console.log(1);
             // button.classList.toggle('active');
             setActive(!active);
             setTimeout(() => button.classList.remove('starRound'), 100);

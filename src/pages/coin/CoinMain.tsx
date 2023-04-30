@@ -10,9 +10,8 @@ import {
 import { Error, Skeleton } from '@root/entities';
 import { Coin } from '@root/features';
 import { deviceMin } from '@shared/lib/constants/device';
+import useMediaQuery from '@shared/lib/hooks/useMediaQuery';
 import axios from 'axios';
-
-import useMediaQuery from '../../shared/lib/hooks/useMediaQuery';
 
 import { CoinApp, CoinSearch } from './CoinMain.styles';
 

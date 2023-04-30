@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import { Arrow } from '@shared/ui/assets/icons/Arrow';
 import fireData from '@shared/ui/assets/json_lottie_file/fire.json';
 import logo from '@shared/ui/assets/svg/logo-cryptonomic.svg';
+import classNames from 'classnames';
 import Lottie from 'lottie-react';
 
 import styles from './navbar.module.scss';
 
 const Navbar: React.FC = () => {
   const [account, setAccount] = useState<string | null>(null);
+  const [modeActive, setModeActive] = useState<boolean>(false);
   const getAccount = async () => {
     if (typeof window.ethereum !== 'undefined') {
       const accounts = await window.ethereum.request({
@@ -82,6 +84,16 @@ const Navbar: React.FC = () => {
               <Link to='/'>Analytics(soon)</Link>
             </li>
           </ul>
+
+          <div
+            className={classNames(styles.mode, {
+              [styles.active]: modeActive
+            })}
+            onClick={() => setModeActive(!modeActive)}
+          >
+            <span></span>
+          </div>
+
           {account ? (
             account.slice(0, 5) + '...' + account.slice(-4)
           ) : (
