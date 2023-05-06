@@ -1,184 +1,146 @@
 @import "src/app/styles/vars";
+@import "src/shared/ui/styles/mixins";
 
-.nav {
-  margin: 10px 0 10px 0;
-
-  & img {
-    width: 40px;
-    height: 40px;
-  }
-
-  & ul {
-    list-style: none;
-  }
-
-  & li {
-    padding: 0 10px 0 0;
-  }
-
-  & li a {
-    text-decoration: none;
-  }
-}
-
-.container {
+.navbar {
   display: flex;
-  justify-content: center;
 
-  @media screen and (max-width: 1550px) {
-    padding: 0 20px;
-  }
-}
-
-.menu {
-  display: flex;
   align-items: center;
+
   justify-content: space-between;
 
-  margin-left: 10px;
-  width: 1467px;
+  margin: 10px;
 
-  & ul {
+  .menu {
     display: flex;
+
     align-items: center;
 
-    //.text-disable{
-    //  transition: .2s;
-    //  color: rgba(255, 255, 255, 0.5);
-    //}
+    gap: 20px;
 
-    //&:hover{
-    //  .textDisable{
-    //    background: none;
-    //  }
-    //}
-  }
-
-  & ul li {
-    border-radius: 1000px;
-    padding: 8px 13px;
-    color: white;
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-
-      .dropBlock {
-        visibility: visible;
+    div {
+      .logo {
+        @include size(40px);
       }
     }
-  }
-}
 
-.dropBlock {
-  position: absolute;
-  visibility: hidden;
-  background: $gray-300;
-  border-radius: 20px;
-  padding: 25px 28px;
-  top: 53px;
-}
+    .list {
+      display: flex;
 
-.block {
-  display: flex;
-  flex-direction: row;
+      gap: 15px;
 
-  div {
-    .titleDrop {
-      color: $white-400;
-      padding: 0 13px 8px 13px;
-    }
-
-    ul {
-      flex-direction: column;
-      align-items: flex-start;
       & li {
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 5px;
+          font-style: normal;
+
+          font-weight: 500;
+
+          font-size: 14px;
+
+          line-height: 24px;
+
+          letter-spacing: 0.01em;
+
+          text-transform: uppercase;
+
+          color: $white-100;
+
+          padding: 2px 0 2px 0;
+
+          &:hover {
+            background: $white;
+
+            color: $black;
+
+            .dropMenu {
+              display: block;
+
+              & li {
+                background: none;
+
+                color: $white;
+              }
+            }
+          }
+        }
       }
     }
+
+    .dropMenu {
+      display: none;
+
+      position: absolute;
+
+      background: $black;
+
+      padding: 10px;
+
+        li {
+          a {
+            &:hover {
+              color: $black;
+
+              background: $green-300;
+            }
+          }
+        }
+      }
   }
-}
+
 
 .connectWallet {
   border: 1px solid $white-50;
+
   background: none;
 
-  font-style: normal;
   font-weight: 500;
+
   font-size: 14px;
+
   line-height: 24px;
 
   letter-spacing: 0.01em;
+
   text-transform: uppercase;
+
   color: $white-50;
 
   border-radius: 4px;
+
   padding: 8px 20.5px;
+
   -webkit-transition: 0.2s;
+
   transition: 0.2s;
 
 
   &:hover {
     border: none;
+
     cursor: pointer;
+
     color: $black;
+
     -webkit-transform: translate(-0.25rem,-0.25rem);
+
     -ms-transform: translate(-0.25rem,-0.25rem);
+
     transform: translate(-0.25rem,-0.25rem);
-    background: $purple-50;
+
+    background: $green-300;
+
     -webkit-box-shadow: 0.25rem 0.25rem $black;
-    box-shadow: 0.25rem 0.25rem $black;
+
+    box-shadow: 0.25rem 0.25rem $gray-300;
   }
 
   &:active {
     -webkit-transform: translate(0);
+
     -ms-transform: translate(0);
+
     transform: translate(0);
+
     -webkit-box-shadow: none;
+
     box-shadow: none;
   }
 }
-
-
-.mode {
-  position: relative;
-  margin: auto;
-  width: 42px;
-  height: 22px;
-  background: #F1F2F4;
-  border-radius: 20px;
-  cursor: pointer; }
-.mode:after {
-  content: '☀️';
-  position: absolute;
-  top: 0;
-  left: 4px;
-  font-size: 14px;
-  height: 22px;
-  line-height: 23px;
-  text-align: center;
-  transition: all .3s ease; }
-@media screen and (max-width: 768px) {
-  .mode:after {
-    line-height: 22px;
-    left: 1px; } }
-.mode.active {
-  background: #1A66E7; }
-.mode.active:after {
-  content: '🌛';
-  transform: translateX(20px); }
-.mode.active span {
-  transform: translateX(0); }
-.mode span {
-  position: absolute;
-  z-index: 1;
-  margin: 2px;
-  display: block;
-  width: 18px;
-  height: 18px;
-  background: white;
-  border-radius: 50%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transform: translateX(20px);
-  transition: all .4s ease; }

@@ -1,19 +1,11 @@
-import React, { ChangeEvent } from 'react';
-import { useEffect, useState } from 'react';
-import {
-  CoinData,
-  CoinInfo,
-  Container,
-  ContainerRow,
-  Paragraph
-} from '@features/Coin/Coins.styles';
+import React, { ChangeEvent, useState } from 'react';
 import { Error, Skeleton } from '@root/entities';
 import { Coin } from '@root/features';
 import { deviceMin } from '@shared/lib/constants/device';
-import useMediaQuery from '@shared/lib/hooks/useMediaQuery';
-import axios from 'axios';
+import useMediaQuery from '@shared/lib/hooks/use-media-query';
+import { useGetCoinsQuery } from '@store/api';
 
-import { CoinApp, CoinSearch } from './CoinMain.styles';
+import styles from './coin-main.module.scss';
 
 interface DataItem {
   id: number;
@@ -27,52 +19,28 @@ interface DataItem {
 }
 
 const CoinMain: React.FC = () => {
-  const [data, setData] = useState([]);
+  const { data, isError, isLoading } = useGetCoinsQuery({
+    vs_currency: 'usd'
+    // per_page: 10,
+    // page: 1
+  });
+
   const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    const timeInterval = setInterval(getData, 2000);
-
-    return () => {
-      clearInterval(timeInterval);
-    };
-  }, []);
-
-  const getData = () => {
-    axios
-      .get(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100`
-      )
-      .then(res => {
-        setData(res.data);
-      })
-      .catch(() => {
-        setError(true);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
-  const filteredCoins = data.filter((el: DataItem) =>
-    el.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const errorMessage = isError ? <Error /> : null;
 
-  const Loading = loading ? <Skeleton /> : null;
-  const errorMessage = error ? <Error /> : null;
   const deviceLaptop = useMediaQuery(deviceMin.laptop);
-  const deviceMobileL = useMediaQuery(deviceMin.mobileL);
+
+  const deviceTablet = useMediaQuery(deviceMin.tablet);
 
   return (
-    <CoinApp>
-      <CoinSearch>
-        <h1 className='coin-text'>Search a currency</h1>
+    <div className={styles.coin__app}>
+      <div className={styles.coin__search}>
+        <h1>Search a currency</h1>
         <form>
           <input
             type='text'
@@ -81,39 +49,58 @@ const CoinMain: React.FC = () => {
             onChange={handleSearch}
           />
         </form>
-      </CoinSearch>
+      </div>
       {errorMessage}
 
-      <Container>
-        <ContainerRow>
-          <CoinInfo>
-            <h1>Name</h1>
-            {deviceMobileL ? <Paragraph>Symbol</Paragraph> : null}
-          </CoinInfo>
-          <CoinData>
-            <Paragraph Width='100px'>Price</Paragraph>
-            {deviceLaptop ? <Paragraph Width='200px'>Volume</Paragraph> : null}
-            <Paragraph Width='80px'>Percent</Paragraph>
-            {deviceLaptop ? <Paragraph Width='240px'>Mkt Cap</Paragraph> : null}
-          </CoinData>
-        </ContainerRow>
-      </Container>
+      <div className={styles.coin__container}>
+        <div className={styles.coin__container_row}>
+          <div className={styles.coin__container_row_info}>
+            <p>Name</p>
+            {deviceTablet ? <p>Symbol</p> : null}
+          </div>
+          <div className={styles.coin__container_row_dataTitle}>
+            <p className={styles.coin__container_row_dataTitle_text_price}>
+              Price
+            </p>
+            {deviceLaptop ? (
+              <p className={styles.coin__container_row_dataTitle_text_volume}>
+                Volume
+              </p>
+            ) : null}
+            <p className={styles.coin__container_row_dataTitle_text_percent}>
+              Percent
+            </p>
+            {deviceLaptop ? (
+              <p className={styles.coin__container_row_dataTitle_text_mktCap}>
+                Mkt Cap
+              </p>
+            ) : null}
+          </div>
+        </div>
+      </div>
 
-      {Loading}
-      {filteredCoins.map((data: DataItem, index: number) => (
-        <Coin
-          key={index}
-          id={data.id}
-          name={data.name}
-          image={data.image}
-          symbol={data.symbol}
-          volume={data.market_cap}
-          price={data.current_price}
-          priceChange={data.price_change_percentage_24h}
-          marketcap={data.market_cap}
-        />
-      ))}
-    </CoinApp>
+      {isLoading ? (
+        <Skeleton />
+      ) : (
+        data
+          .filter((el: DataItem) =>
+            el.name.toLowerCase().includes(search.toLowerCase())
+          )
+          .map((data: DataItem, index: number) => (
+            <Coin
+              key={index}
+              id={data.id}
+              name={data.name}
+              image={data.image}
+              symbol={data.symbol}
+              volume={data.market_cap}
+              price={data.current_price}
+              priceChange={data.price_change_percentage_24h}
+              marketcap={data.market_cap}
+            />
+          ))
+      )}
+    </div>
   );
 };
 

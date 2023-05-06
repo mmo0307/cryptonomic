@@ -1,0 +1,34 @@
+@import "src/app/styles/vars";
+@import "src/shared/ui/styles/mixins";
+
+.typewriter {
+  overflow: hidden;
+
+  border-right: .15em solid $orange-50;
+
+  margin: 0 auto;
+
+  letter-spacing: .15em;
+
+  animation:
+          typing 2s steps(40, end),
+          blink-caret .75s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0
+  }
+  to {
+    width: 100%
+  }
+}
+
+@keyframes blink-caret {
+  from, to {
+    border-color: transparent
+  }
+  50% {
+    border-color: orange;
+  }
+}

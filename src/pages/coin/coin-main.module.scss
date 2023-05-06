@@ -1,0 +1,114 @@
+@import "src/app/styles/vars";
+@import "src/shared/ui/styles/mixins";
+
+.coin {
+  &__app{
+    @include flex(center, center, column);
+
+    margin-top: 64px;
+
+    color: $white;
+  }
+
+  &__search {
+    @include flex(center, center, column);
+
+    margin-bottom: 64px;
+
+    & h1 {
+      margin-bottom: 32px;
+
+      text-align: center;
+    }
+
+    & input {
+      padding-left: 16px;
+
+      width: 300px;
+
+      height: 50px;
+
+      border-radius: 4px;
+
+      border: 1px solid $gray;
+
+      background-color: $black-400;
+    }
+
+    & input:focus {
+      outline: none;
+
+      border: 1px solid white;
+    }
+  }
+
+  &__container {
+    @include flex(center);
+
+    &_row {
+      @include flex(flex-start, center, row);
+
+      height: 80px;
+
+      border-bottom: 1px solid $white-200;
+
+      @media screen and (max-width: 425px) {
+        width: 354px;
+      }
+
+      @media screen and (max-width: 320px) {
+        width: 300px;
+      }
+
+      &_info {
+        @include flex(center, center);
+
+        padding-right: 24px;
+
+        min-width: 300px;
+
+        & p {
+          font-size: 16px;
+
+          width: 150px;
+        }
+
+        & img {
+          @include size(30px);
+
+          margin-right: 10px;
+        }
+
+        @media screen and (max-width: 425px)  {
+          min-width: 120px;
+        }
+      }
+
+      &_dataTitle {
+        @include flex(space-between);
+
+        text-align: center;
+
+        width: 100%;
+
+        &_text {
+          &_price {
+            width: 100px;
+          }
+
+          &_volume {
+            width: 200px;
+          }
+
+          &_percent {
+            width: 80px;
+          }
+
+          &_mkt-cap {
+            width: 240px;
+          }
+        }
+      }
+    }
+  }
+}

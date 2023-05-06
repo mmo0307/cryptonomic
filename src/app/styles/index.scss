@@ -8,18 +8,26 @@ body {
 
   font-style: normal;
 
-  background-color: $black-100 !important;
+  //background-color: $black-100 !important;
+  background-color: $black !important;
+
+  &::-webkit-scrollbar {
+    width: 8px; /* width of the entire scrollbar */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $black-200; /* color of the tracking area */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(255, 255, 255); /* color of the scroll thumb */
+    border-radius: 20px; /* creates padding around scroll thumb */
+  }
 }
 
-body::-webkit-scrollbar {
-  width: 8px; /* width of the entire scrollbar */
-}
+.apexcharts-tooltip-text-y-label,
+.apexcharts-tooltip-text-y-value {
+  color: $black-400 !important;
 
-body::-webkit-scrollbar-track {
-  background: $black-200; /* color of the tracking area */
-}
-
-body::-webkit-scrollbar-thumb {
-  background-color: rgb(255, 255, 255); /* color of the scroll thumb */
-  border-radius: 20px; /* creates padding around scroll thumb */
+  font-size: 20px !important;
 }

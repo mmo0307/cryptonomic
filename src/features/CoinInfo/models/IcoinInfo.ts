@@ -1,3 +1,5 @@
+import React from 'react';
+
 interface CommunityData {
   twitter_followers: number;
 }
@@ -30,6 +32,7 @@ interface MarketData {
   high_24h: PriceData;
   low_24h: PriceData;
   market_cap: PriceData;
+  price_change_percentage_1h_in_currency: PriceData;
   price_change_percentage_24h_in_currency: PriceData;
   price_change_percentage_7d_in_currency: PriceData;
   price_change_percentage_14d_in_currency: PriceData;
@@ -50,7 +53,7 @@ interface MarketData {
   max_supply: number;
 }
 
-export interface Data {
+interface DataCoin {
   name: string;
   categories: string[];
   genesis_date: string;
@@ -61,3 +64,65 @@ export interface Data {
   community_data: CommunityData;
   market_data: MarketData;
 }
+
+type RadioInputChangeEvent = React.ChangeEvent<HTMLInputElement> & {
+  target: {
+    value: string;
+  };
+};
+
+interface ApexChartData {
+  name: string;
+  data: number[];
+}
+
+interface ChartOptions {
+  chart: {
+    height: number;
+    type:
+      | 'area'
+      | 'line'
+      | 'bar'
+      | 'pie'
+      | 'donut'
+      | 'radialBar'
+      | 'scatter'
+      | 'bubble'
+      | 'heatmap'
+      | 'treemap'
+      | 'boxPlot'
+      | 'candlestick'
+      | 'radar'
+      | 'polarArea'
+      | 'rangeBar'
+      | 'rangeArea';
+  };
+  dataLabels: {
+    enabled: boolean;
+  };
+  stroke: {
+    curve: 'smooth';
+  };
+  xaxis: {
+    type: 'datetime';
+    categories: string[];
+  };
+  tooltip: {
+    x: {
+      format: string;
+    };
+  };
+}
+
+interface ChartObject {
+  series: ApexChartData[];
+  options: ChartOptions;
+}
+
+interface ChartData {
+  prices: number[][];
+  market_caps: number[][];
+  total_volumes: number[][];
+}
+
+export type { ChartData, ChartObject, DataCoin, RadioInputChangeEvent };

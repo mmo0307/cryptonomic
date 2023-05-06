@@ -1,162 +1,85 @@
 import React, { Fragment, useMemo } from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { FavoriteButton } from '@entities/buttons';
-import ApexChart from '@entities/Charts/Spline';
+import { FavoriteButton } from '@component/buttons';
+import ApexChart from '@entities/Charts/spline/Spline';
 import { Error, Skeleton, TradingViewWidget } from '@root/entities';
-import { tabData } from '@shared/lib';
-import axios from 'axios';
+import {
+  formatNumberWithCommas,
+  formatter,
+  tabData,
+  toDayDate,
+  useWindowSize
+} from '@shared/lib';
+import { useGetCoinQuery, useGetMarketChartQuery } from '@store/api';
 import classNames from 'classnames';
 import { nanoid } from 'nanoid';
 
-import { Data } from './models/IcoinInfo';
+import {
+  ChartData,
+  ChartObject,
+  DataCoin,
+  RadioInputChangeEvent
+} from './models/IcoinInfo';
 
 import styles from './coinInfo.module.scss';
 
-type RadioInputChangeEvent = React.ChangeEvent<HTMLInputElement> & {
-  target: {
-    value: string;
-  };
-};
-
-type ChartData = {
-  data: {
-    prices: number[];
-    market_caps: number[];
-    total_volumes: number[];
-  };
-  success: boolean;
-};
-
-interface ApexChartData {
-  name: string;
-  data: number[];
-}
-
-type ChartOptions = {
-  chart: {
-    height: number;
-    type:
-      | 'area'
-      | 'line'
-      | 'bar'
-      | 'pie'
-      | 'donut'
-      | 'radialBar'
-      | 'scatter'
-      | 'bubble'
-      | 'heatmap'
-      | 'treemap'
-      | 'boxPlot'
-      | 'candlestick'
-      | 'radar'
-      | 'polarArea'
-      | 'rangeBar'
-      | 'rangeArea';
-  };
-  dataLabels: {
-    enabled: boolean;
-  };
-  stroke: {
-    curve: 'smooth';
-  };
-  xaxis: {
-    type: 'datetime';
-    categories: string[];
-  };
-  tooltip: {
-    x: {
-      format: string;
-    };
-  };
-};
-
-interface ChartObject {
-  series: ApexChartData[];
-  options: ChartOptions;
-}
-
 const CoinInfo: React.FC = () => {
-  const [data_coin, setData] = useState<Data | null>(null);
+  //1-365 days
+  const [days, setDays] = useState<number>(365);
 
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const [error, setError] = useState<boolean>(false);
-
+  //select tabs
   const [selectedOption, setSelectedOption] = useState('radio-1');
 
-  //1-365 days
-  const [days, setDays] = useState<number>(1);
+  const { id } = useParams<string>();
 
-  const [chartData, setChartData] = useState<ChartData | null>(null);
+  const market_data = true;
+
+  const community_data = true;
+
+  const currency = 'usd';
+
+  const {
+    data: coinMarketData,
+    isLoading: coinMarketDataLoading,
+    isError: coinMarketDataError
+  } = useGetCoinQuery({
+    id,
+    market_data,
+    community_data
+  });
+
+  const {
+    data: marketChartData,
+    isLoading: marketChartDataLoading,
+    isError: marketChartDataError
+  } = useGetMarketChartQuery({
+    id,
+    currency,
+    days
+  });
 
   const handleOptionChange = (event: RadioInputChangeEvent) => {
     setSelectedOption(event.target.value);
   };
 
-  const { id } = useParams<string>();
-
-  const URLs = [
-    `https://api.coingecko.com/api/v3/coins/${id}?tickers=true&market_data=true&community_data=true&developer_data=true&sparkline=true`,
-    `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${days}`
-  ];
-
-  const getAllData = (URLs: string[]) => {
-    return Promise.all(URLs.map(fetchData));
-  };
-
-  const fetchData = (URL: string) => {
-    return axios
-      .get(URL)
-      .then(response => {
-        return {
-          success: true,
-          data: response.data
-        };
-      })
-      .catch(e => {
-        console.log('error=>', e);
-        setError(true);
-        return {
-          success: false,
-          data: null
-        };
-      });
-  };
-
-  useEffect(() => {
-    getAllData(URLs)
-      .then(resp => {
-        console.log('resp 0=>', resp[0]);
-        console.log('resp 1=>', resp[1]);
-
-        setData(resp[0].data);
-        setChartData(resp[1].data);
-      })
-      .catch(e => {
-        console.log(e);
-        setError(true);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
-
-  console.log('chartData=>', chartData);
-  console.log('data_coin 1=>', data_coin);
-
-  if (loading) {
+  if (
+    coinMarketDataLoading ||
+    marketChartDataLoading ||
+    !coinMarketData ||
+    !marketChartData
+  ) {
     return <Skeleton />;
   }
 
-  if (error) {
+  if (coinMarketDataError || marketChartDataError) {
     return <Error />;
   }
 
   return (
     <View
-      coinChartData={chartData}
-      data_coin={data_coin}
+      coinChartData={marketChartData}
+      data_coin={coinMarketData}
       selectedOption={selectedOption}
       handleOptionChange={handleOptionChange}
     />
@@ -164,75 +87,12 @@ const CoinInfo: React.FC = () => {
 };
 
 const View: React.FC<{
-  coinChartData: ChartData | null;
-  data_coin: Data | null;
+  coinChartData: ChartData;
+  data_coin: DataCoin;
   selectedOption: string;
   handleOptionChange: (event: RadioInputChangeEvent) => void;
 }> = ({ coinChartData, data_coin, selectedOption, handleOptionChange }) => {
-  const [chartData, setChartData] = useState<ChartObject>({
-    series: [
-      {
-        name: 'series1',
-        data: [12, 50, 70, 10, 45, 13, 5]
-      }
-    ],
-    options: {
-      chart: {
-        height: 350,
-        type: 'area'
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        curve: 'smooth'
-      },
-      xaxis: {
-        type: 'datetime',
-        categories: [
-          '2018-09-19T00:00:00.000Z',
-          '2018-09-19T01:30:00.000Z',
-          '2018-09-19T02:30:00.000Z',
-          '2018-09-19T03:30:00.000Z',
-          '2018-09-19T04:30:00.000Z',
-          '2018-09-19T05:30:00.000Z',
-          '2018-09-19T06:30:00.000Z'
-        ]
-      },
-      tooltip: {
-        x: {
-          format: 'dd/MM/yy HH:mm'
-        }
-      }
-    }
-  });
-
-  const formatter = Intl.NumberFormat('en', {
-    notation: 'compact'
-  });
-
-  const formatNumberWithCommas = (number: number | string | null) => {
-    if (number === null) {
-      return 0;
-    }
-
-    if (typeof number === 'number') {
-      return Math.floor(number)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
-
-    return number.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  };
-
-  const toDayDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
-  };
+  const { width } = useWindowSize();
 
   const {
     name,
@@ -286,6 +146,44 @@ const View: React.FC<{
     description
   } = data_coin;
 
+  const categoriesElements: string[] = coinChartData.prices.map(
+    (subArray: number[]) => new Date(subArray[0]).toDateString()
+  );
+
+  const dataElements: number[] = coinChartData.prices.map(
+    (subArray: number[]) => subArray[1]
+  );
+
+  const [chartData, setChartData] = useState<ChartObject>({
+    series: [
+      {
+        name,
+        data: dataElements
+      }
+    ],
+    options: {
+      chart: {
+        height: 350,
+        type: 'area'
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth'
+      },
+      xaxis: {
+        type: 'datetime',
+        categories: categoriesElements
+      },
+      tooltip: {
+        x: {
+          format: 'dd/MM/yy HH:mm'
+        }
+      }
+    }
+  });
+
   const tabContent = useMemo(() => {
     switch (selectedOption) {
       case 'radio-1': {
@@ -320,8 +218,24 @@ const View: React.FC<{
                   [styles.overview__block_supply]: true
                 })}
               >
-                <span>Max Supply: {formatNumberWithCommas(max_supply)}</span>
-                <span>
+                {formatNumberWithCommas(max_supply) > 0 && (
+                  <span
+                    style={{
+                      textAlign: formatNumberWithCommas(max_supply)
+                        ? 'center'
+                        : undefined
+                    }}
+                  >
+                    Max Supply: {formatNumberWithCommas(max_supply)}
+                  </span>
+                )}
+                <span
+                  style={{
+                    textAlign: formatNumberWithCommas(circulating_supply)
+                      ? 'center'
+                      : undefined
+                  }}
+                >
                   Circulating Supply:{' '}
                   {formatNumberWithCommas(circulating_supply)}
                 </span>
@@ -407,7 +321,10 @@ const View: React.FC<{
                       [styles.overview_green]: price_change_percentage_24h > 0
                     })}
                   >
-                    {price_change_percentage_24h}$
+                    {price_change_percentage_24h
+                      ? price_change_percentage_24h
+                      : '--'}
+                    $
                   </span>
                   <span
                     className={classNames({
@@ -417,7 +334,10 @@ const View: React.FC<{
                         price_change_percentage_24h_in_currency.usd > 0
                     })}
                   >
-                    {price_change_percentage_24h_in_currency.usd}%
+                    {price_change_percentage_24h_in_currency.usd
+                      ? price_change_percentage_24h_in_currency.usd
+                      : '--'}
+                    %
                   </span>
                 </div>
               </div>
@@ -430,7 +350,10 @@ const View: React.FC<{
                       [styles.overview_green]: price_change_percentage_7d > 0
                     })}
                   >
-                    {price_change_percentage_7d}$
+                    {price_change_percentage_7d
+                      ? price_change_percentage_7d
+                      : '--'}
+                    $
                   </span>
                   <span
                     className={classNames({
@@ -440,7 +363,10 @@ const View: React.FC<{
                         price_change_percentage_7d_in_currency.usd > 0
                     })}
                   >
-                    {price_change_percentage_7d_in_currency.usd}%
+                    {price_change_percentage_7d_in_currency.usd
+                      ? price_change_percentage_7d_in_currency.usd
+                      : '--'}
+                    %
                   </span>
                 </div>
               </div>
@@ -453,7 +379,10 @@ const View: React.FC<{
                       [styles.overview_green]: price_change_percentage_14d > 0
                     })}
                   >
-                    {price_change_percentage_14d}$
+                    {price_change_percentage_14d
+                      ? price_change_percentage_14d
+                      : '--'}
+                    $
                   </span>
                   <span
                     className={classNames({
@@ -463,7 +392,10 @@ const View: React.FC<{
                         price_change_percentage_14d_in_currency.usd > 0
                     })}
                   >
-                    {price_change_percentage_14d_in_currency.usd}%
+                    {price_change_percentage_14d_in_currency.usd
+                      ? price_change_percentage_14d_in_currency.usd
+                      : '--'}
+                    %
                   </span>
                 </div>
               </div>
@@ -476,7 +408,10 @@ const View: React.FC<{
                       [styles.overview_green]: price_change_percentage_30d > 0
                     })}
                   >
-                    {price_change_percentage_30d}$
+                    {price_change_percentage_30d
+                      ? price_change_percentage_30d
+                      : '--'}
+                    $
                   </span>
                   <span
                     className={classNames({
@@ -486,7 +421,10 @@ const View: React.FC<{
                         price_change_percentage_30d_in_currency.usd > 0
                     })}
                   >
-                    {price_change_percentage_30d_in_currency.usd}%
+                    {price_change_percentage_30d_in_currency.usd
+                      ? price_change_percentage_30d_in_currency.usd
+                      : '--'}
+                    %
                   </span>
                 </div>
               </div>
@@ -499,7 +437,10 @@ const View: React.FC<{
                       [styles.overview_green]: price_change_percentage_60d > 0
                     })}
                   >
-                    {price_change_percentage_60d}$
+                    {price_change_percentage_60d
+                      ? price_change_percentage_60d
+                      : '--'}
+                    $
                   </span>
                   <span
                     className={classNames({
@@ -509,7 +450,10 @@ const View: React.FC<{
                         price_change_percentage_60d_in_currency.usd > 0
                     })}
                   >
-                    {price_change_percentage_60d_in_currency.usd}%
+                    {price_change_percentage_60d_in_currency.usd
+                      ? price_change_percentage_60d_in_currency.usd
+                      : '--'}
+                    %
                   </span>
                 </div>
               </div>
@@ -522,7 +466,10 @@ const View: React.FC<{
                       [styles.overview_green]: price_change_percentage_200d > 0
                     })}
                   >
-                    {price_change_percentage_200d}$
+                    {price_change_percentage_200d
+                      ? price_change_percentage_200d
+                      : '--'}
+                    $
                   </span>
                   <span
                     className={classNames({
@@ -532,7 +479,10 @@ const View: React.FC<{
                         price_change_percentage_200d_in_currency.usd > 0
                     })}
                   >
-                    {price_change_percentage_200d_in_currency.usd}%
+                    {price_change_percentage_200d_in_currency.usd
+                      ? price_change_percentage_200d_in_currency.usd
+                      : '--'}
+                    %
                   </span>
                 </div>
               </div>
@@ -545,7 +495,10 @@ const View: React.FC<{
                       [styles.overview_green]: price_change_percentage_1y > 0
                     })}
                   >
-                    {price_change_percentage_1y}$
+                    {price_change_percentage_1y
+                      ? price_change_percentage_1y
+                      : '--'}
+                    $
                   </span>
                   <span
                     className={classNames({
@@ -555,7 +508,10 @@ const View: React.FC<{
                         price_change_percentage_1h_in_currency.usd > 0
                     })}
                   >
-                    {price_change_percentage_1h_in_currency.usd}%
+                    {price_change_percentage_1h_in_currency.usd
+                      ? price_change_percentage_1h_in_currency.usd
+                      : '--'}
+                    %
                   </span>
                 </div>
               </div>
@@ -625,13 +581,15 @@ const View: React.FC<{
                   <span className={styles.market__info_coin_symbol}>USD</span>
                 </div>
 
-                <span
-                  className={classNames(styles.market__info_coin_percent, {
-                    [styles.market__info_coin_percent_red]: true
-                  })}
-                >
-                  {price_change_24h.toFixed(2)}
-                </span>
+                {price_change_24h > 0.009 && (
+                  <span
+                    className={classNames(styles.market__info_coin_percent, {
+                      [styles.market__info_coin_percent_red]: true
+                    })}
+                  >
+                    {price_change_24h.toFixed(2)}
+                  </span>
+                )}
                 <span
                   className={classNames(styles.market__info_coin_price, {
                     [styles.market__info_coin_price_red]: true

@@ -1,0 +1,117 @@
+@import "src/app/styles/vars";
+@import "src/shared/ui/styles/mixins";
+
+
+.container {
+  width: 1234px;
+
+  height: 159px;
+
+  background: $white-100;
+
+  border: 1px solid $black-500;
+
+  box-shadow: 0 5px 0 $green-300;
+
+  border-radius: 45px;
+
+  transition: 1s ease;
+
+  &.active {
+    width: 1234px;
+
+    height: 279px;
+
+    background: $green-300;
+
+    border: 1px solid $black;
+
+    box-shadow: 0 5px 0 $white;
+
+    border-radius: 45px;
+
+    transition: .5s ease;
+  }
+
+  .wrapper {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    flex-direction: column;
+
+    gap: 25px;
+
+    padding: 41px 57px 41px 60px;
+
+    .line {
+      width: 1114px;
+
+      height: 0;
+
+      border: 1px solid $black;
+
+      transition: .5s ease;
+    }
+
+    .text {
+      font-weight: 400;
+
+      font-size: 18px;
+
+      line-height: 23px;
+
+      text-align: start;
+
+      transition: .5s ease;
+    }
+
+    .block {
+      display: flex;
+
+      align-items: center;
+
+      width: 100%;
+
+      justify-content: space-between;
+
+      .text_block {
+        display: flex;
+
+        align-items: center;
+
+        gap: 25px;
+
+        &_label_number {
+          font-weight: 500;
+
+          font-size: 60px;
+
+          line-height: 77px;
+        }
+
+        &_label_text {
+          font-weight: 500;
+
+          font-size: 30px;
+
+          line-height: 38px;
+        }
+      }
+
+      .toggle_button {
+        transition: .5s ease;
+
+        transform: rotate(0deg);
+
+        &_active {
+          transition: .5s ease;
+
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+}

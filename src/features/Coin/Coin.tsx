@@ -1,15 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { deviceMin } from '@shared/lib/constants/device';
-import useMediaQuery from '@shared/lib/hooks/useMediaQuery';
+import useMediaQuery from '@shared/lib/hooks/use-media-query';
+import classNames from 'classnames';
 
-import {
-  CoinData,
-  CoinInfo,
-  Container,
-  ContainerRow,
-  Paragraph
-} from './Coins.styles';
+import styles from './coin.module.scss';
 
 const Coin: React.FC<{
   id: number;
@@ -26,35 +21,41 @@ const Coin: React.FC<{
 
   return (
     <Link to={`/coin/${id}`}>
-      <Container>
-        <ContainerRow>
-          <CoinInfo>
+      <div className={styles.coin__container}>
+        <div className={styles.coin__container_row}>
+          <div className={styles.coin__container_row_info}>
             <img src={image} alt='crypto' />
-            <h1>{name}</h1>
-            {deviceMobileL ? <Paragraph>{symbol}</Paragraph> : null}
-          </CoinInfo>
-          <CoinData>
-            <Paragraph Width='100px'>${price}</Paragraph>
+            <p>{name}</p>
+            {deviceMobileL ? <p>{symbol}</p> : null}
+          </div>
+          <div className={styles.coin__container_row_dataTitle}>
+            <p className={styles.coin__container_row_dataTitle_text_price}>
+              ${price}
+            </p>
             {deviceLaptop ? (
-              <Paragraph Width='200px'>${volume.toLocaleString()}</Paragraph>
+              <p className={styles.coin__container_row_dataTitle_text_volume}>
+                ${volume.toLocaleString()}
+              </p>
             ) : null}
-            {priceChange < 0 ? (
-              <Paragraph Width='80px' Color='red'>
-                {priceChange.toFixed(2)}%
-              </Paragraph>
-            ) : (
-              <Paragraph Width='80px' Color='#11d811'>
-                {priceChange.toFixed(2)}%
-              </Paragraph>
-            )}
+            <p
+              className={classNames(
+                styles.coin__container_row_dataTitle_text_price,
+                {
+                  [styles.red]: priceChange < 0,
+                  [styles.green]: priceChange > 0
+                }
+              )}
+            >
+              {priceChange !== null ? priceChange.toFixed(2) : '--'}%
+            </p>
             {deviceLaptop ? (
-              <Paragraph Width='240px'>
+              <p className={styles.coin__container_row_dataTitle_text_mktCap}>
                 Mkt Cap: ${marketcap.toLocaleString()}
-              </Paragraph>
+              </p>
             ) : null}
-          </CoinData>
-        </ContainerRow>
-      </Container>
+          </div>
+        </div>
+      </div>
     </Link>
   );
 };

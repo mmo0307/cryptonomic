@@ -1,7 +1,7 @@
 @import "src/app/styles/vars";
 
 /* 404 Error Page */
-#error {
+.error {
   position: fixed;
   left: 0;
   top: 0;
@@ -10,7 +10,7 @@
   line-height: 1.5em;
   z-index: 9999;
 
-  #error_text {
+  .error_text {
     font-size: 40px;
     display: flex;
     flex-direction: column;
@@ -76,6 +76,7 @@
       format("truetype");
   font-weight: bold;
 }
+
 @font-face {
   font-family: Shabnam;
   src: url("https://cdn.rawgit.com/ahmedhosna95/upload/ba6564f8/fonts/Shabnam/Shabnam.eot");

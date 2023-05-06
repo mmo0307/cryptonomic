@@ -1,0 +1,129 @@
+@import "src/app/styles/vars";
+@import "src/shared/ui/styles/mixins";
+
+.container {
+  display: flex;
+
+  position: relative;
+
+  z-index: -1;
+
+  &_banner {
+    video {
+      height: 900px;
+    }
+  }
+
+  &_content {
+    color: $white-100 !important;
+
+    text-align: justify !important;
+
+    padding: 0 30px;
+  }
+
+  &_title_block {
+    display: flex;
+
+    margin-bottom: 10px;
+
+    gap: 5px;
+
+    img {
+      transition: .5s all;
+
+      &:hover{
+        transform: scale(1.1);
+      }
+    }
+
+    .title {
+      background: $green-300;
+
+      border-radius: 7px;
+
+      padding: 0 7px;
+
+      font-weight: 500;
+    }
+  }
+
+  &_faq_title {
+    display: flex;
+
+    justify-content: center;
+
+    margin-bottom: 10px;
+
+    gap: 5px;
+
+    .title {
+      background: $green-300;
+
+      border-radius: 7px;
+
+      padding: 7px;
+
+      font-weight: 500;
+
+      font-size: 40px;
+    }
+  }
+
+  &_faq_block {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 30px;
+  }
+
+  &_coin_list {
+    display: flex;
+
+    gap: 10px;
+
+    width: 100%;
+
+    height: 20px;
+
+    overflow: hidden;
+
+    &_block {
+      display: flex;
+
+      gap: 3px;
+
+      align-items: center;
+
+      span {
+        color: $white;
+      }
+
+      img {
+        @include size(20px);
+      }
+
+      position: relative;
+
+      left: 0;
+
+      animation: marquee 20s linear infinite;
+
+      @keyframes marquee {
+        0% {
+          left: 100%;
+        }
+        100% {
+          left: -100%;
+        }
+      }
+    }
+  }
+}
+
+.banner {
+  padding: 0 45px;
+}

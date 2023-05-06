@@ -3,11 +3,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const binanceApiSlice = createApi({
   reducerPath: 'binanceApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3001' }),
-  tagTypes: ['Heroes'],
+  tagTypes: ['Coins'],
   endpoints: builder => ({
     getHeroes: builder.query({
       query: () => '/heroes',
-      providesTags: ['Heroes']
+      providesTags: ['Coins']
     }),
     createHero: builder.mutation({
       query: hero => ({
@@ -15,14 +15,14 @@ export const binanceApiSlice = createApi({
         method: 'POST',
         body: hero
       }),
-      invalidatesTags: ['Heroes']
+      invalidatesTags: ['Coins']
     }),
     deleteHero: builder.mutation({
       query: id => ({
         url: `/heroes/${id}`,
         method: 'DELETE'
       }),
-      invalidatesTags: ['Heroes']
+      invalidatesTags: ['Coins']
     })
   })
 });
