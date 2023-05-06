@@ -1,7 +1,6 @@
 @import "src/app/styles/vars";
 @import "src/shared/ui/styles/mixins";
 
-
 .container {
   width: 1234px;
 
@@ -34,13 +33,7 @@
   }
 
   .wrapper {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    flex-direction: column;
+    @include flex(space-between, center, column);
 
     gap: 25px;
 
@@ -69,13 +62,9 @@
     }
 
     .block {
-      display: flex;
-
-      align-items: center;
+      @include flex(space-between, center);
 
       width: 100%;
-
-      justify-content: space-between;
 
       .text_block {
         display: flex;

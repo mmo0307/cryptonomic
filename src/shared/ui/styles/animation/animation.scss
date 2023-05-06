@@ -58,3 +58,24 @@
     background-position: 208px;
   }
 }
+
+@keyframes marquee {
+  0% {
+    left: 100%;
+  }
+  100% {
+    left: -100%;
+  }
+}
+
+@keyframes logo {
+  0% {
+    transform: scale(.5);
+  }
+  50%{
+    transform: scale(.75);
+  }
+  100% {
+    transform: scale(.5);
+  }
+}

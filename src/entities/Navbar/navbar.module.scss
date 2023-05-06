@@ -2,11 +2,7 @@
 @import "src/shared/ui/styles/mixins";
 
 .navbar {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
+  @include flex(space-between, center);
 
   margin: 10px;
 

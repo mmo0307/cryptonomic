@@ -20,10 +20,20 @@ const Home = hoc(useHome, ({ faqData, isError, isLoading, data }) => (
   <>
     <section className={classNames(styles.container_banner)}>
       <div className={styles.banner_main}>
-        <img className={styles.pack_1} src={pack} alt='pack' />
-        <img className={styles.pack_2} src={pack} alt='pack' />
         <div className={styles.banner_main_block}>
-          <img src={logo} alt='logo' />
+          <img className={styles.pack_1} src={pack} alt='pack' />
+          <img className={styles.pack_2} src={pack} alt='pack' />
+          <div>
+            <h1>Cryptonomic</h1>
+            <Ptag defaultSize='m'>
+              Project for people who look for information about crypto tools
+            </Ptag>
+          </div>
+          <img
+            className={styles.banner_main_block_logo}
+            src={logo}
+            alt='logo'
+          />
         </div>
       </div>
 

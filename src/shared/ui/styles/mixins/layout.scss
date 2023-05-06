@@ -68,7 +68,7 @@
   padding-left: $value;
 }
 
-@mixin absolute-center {
+@mixin absolute-center() {
   position: absolute;
 
   top: 50%;

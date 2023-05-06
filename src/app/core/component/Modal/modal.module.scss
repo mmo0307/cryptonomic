@@ -1,33 +1,49 @@
-@import "../../../styles/vars";
+@import "src/app/styles/vars";
+@import "src/shared/ui/styles/mixins";
 
 .modal {
+  @include flex(center, center);
+
   height: 100vh;
+
   width: 100vw;
-  background-color: rgba(0, 0, 0, 0.81);
+
+  background-color: $black-400;
+
   position: fixed;
+
   top: 0;
+
   left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
   opacity: 0;
+
   pointer-events: none;
+
   transition: 0.5s;
 
   &.active {
     z-index: 10000;
+
     opacity: 1;
+
     pointer-events: all;
   }
 }
 
 .modal_content {
   min-width: 300px;
+
   min-height: 100px;
+
   padding: 20px;
+
   border-radius: 12px;
+
   background-color: $black-300;
+
   transform: scale(0.5);
+
   transition: 0.4s all;
 
   &.active {
@@ -40,9 +56,13 @@
 
   span {
     position: absolute;
+
     right: 20px;
+
     font-size: 1.8rem;
+
     cursor: pointer;
+
     color: $red-100;
   }
 

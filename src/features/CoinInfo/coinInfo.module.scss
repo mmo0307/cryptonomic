@@ -30,23 +30,23 @@ border-radius: 50%;
 }
 
 &__cap {
-color: $white;
+  color: $white;
 
-position: relative;
+  position: relative;
 
-right: 105px;
+  right: 105px;
 
-background: $gray-300;
+  background: $gray-300;
 
-padding: 4px 12px;
+  padding: 4px 12px;
 
-border-radius: 8px;
+  border-radius: 8px;
 }
 
 &__info {
-@include flex(flex-start, flex-start, column);
+  @include flex(flex-start, flex-start, column);
 
-gap: 8px;
+  gap: 8px;
 
 &_name {
   font-weight: 700;
@@ -87,7 +87,7 @@ gap: 8px;
       line-height: 28px;
 
       &_red {
-        color: #F23645;
+        color: $red-200;
       }
 
       &_title {
@@ -176,33 +176,29 @@ padding: 0.75rem;
 
 border-radius: 99px;
 
-* {
-  z-index: 2;
-}
-
 @media (max-width: 700px) {
   transform: scale(0.6);
 }
 
-&_tab {
-  @include flex(center);
+  &_tab {
+    @include flex(center);
 
-  color: $white-400;
+    color: $white-400;
 
-  height: 25px;
+    height: 25px;
 
-  width: 200px;
+    width: 200px;
 
-  font-size: 1.25rem;
+    font-size: 1.25rem;
 
-  font-weight: 500;
+    font-weight: 500;
 
-  border-radius: 99px;
+    border-radius: 99px;
 
-  cursor: pointer;
+    cursor: pointer;
 
-  transition: color 0.15s ease-in;
-}
+    transition: color 0.15s ease-in;
+  }
 }
 
 input[type="radio"] {
