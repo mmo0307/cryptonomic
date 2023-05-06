@@ -1,10 +1,13 @@
 import React, { useId } from 'react';
+import { Link } from 'react-router-dom';
 import { Ptag, Toggle } from '@app/core/component';
 import { TypingAnimation } from '@entities/animations/type-text/TypeText';
 import { useHome } from '@pages/home/home.props';
 import { VideoPlayer } from '@root/entities';
 import { hoc } from '@shared/lib';
 import arrow from '@shared/ui/assets/icons/arrow.svg';
+import pack from '@shared/ui/assets/icons/pack.svg';
+import logo from '@shared/ui/assets/images/svg/logo-cryptonomic.svg';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import myVideo from '@shared/ui/assets/video/banner_1.mp4';
@@ -16,6 +19,29 @@ import styles from './home.module.scss';
 const Home = hoc(useHome, ({ faqData, isError, isLoading, data }) => (
   <>
     <section className={classNames(styles.container_banner)}>
+      <div className={styles.banner_main}>
+        <img className={styles.pack_1} src={pack} alt='pack' />
+        <img className={styles.pack_2} src={pack} alt='pack' />
+        <div className={styles.banner_main_block}>
+          <img src={logo} alt='logo' />
+        </div>
+      </div>
+
+      {!isError && !isLoading && (
+        <div className={styles.container_coin_list}>
+          {data.map((item: any) => (
+            <Link
+              to={`/coin/${item.id}`}
+              key={uuidv4()}
+              className={styles.container_coin_list_block}
+            >
+              <img src={item.image} alt='Coin IMG' />
+              <span>{item.symbol.toUpperCase()}</span>
+            </Link>
+          ))}
+        </div>
+      )}
+
       <div className={styles.banner}>
         <div className={styles.container_title_block}>
           <Ptag defaultSize='m' className={styles.title}>
@@ -52,17 +78,6 @@ const Home = hoc(useHome, ({ faqData, isError, isLoading, data }) => (
           </div>
         </div>
       </div>
-
-      {!isError && !isLoading && (
-        <div className={styles.container_coin_list}>
-          {data.map((item: any) => (
-            <div key={uuidv4()} className={styles.container_coin_list_block}>
-              <img src={item.image} alt='Coin IMG' />
-              <span>{item.symbol.toUpperCase()}</span>
-            </div>
-          ))}
-        </div>
-      )}
 
       <div>
         <div className={styles.container_faq_title}>
