@@ -1,20 +1,20 @@
-export interface DataCoins {
+interface DataCoins {
   symbol: string;
   price: number;
 }
 
-export interface CoinsAttr {
+interface CoinsAttr {
   symbol: string;
   price: number;
   coin: string;
 }
 
-export interface DataCoin {
+interface DataCoin {
   coin: string;
   price: number;
 }
 
-export interface ResultCoins extends DataCoin {
+interface ResultCoins extends DataCoin {
   percent: number;
   profitPrice: string;
   strategy: {
@@ -24,9 +24,12 @@ export interface ResultCoins extends DataCoin {
   };
 }
 
-export interface CoinRes {
+interface CoinRes {
   USDT: ResultCoins[];
   BTC: ResultCoins[];
   ETH: ResultCoins[];
   BNB: ResultCoins[];
+  [key: string]: ResultCoins[];
 }
+
+export type { CoinRes, CoinsAttr, DataCoin, DataCoins, ResultCoins };

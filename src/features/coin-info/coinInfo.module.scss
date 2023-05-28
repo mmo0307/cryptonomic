@@ -1,0 +1,378 @@
+@import "src/app/styles/vars";
+@import "src/shared/ui/styles/mixins";
+
+.wrapper {
+  @include flex(space-between, center);
+
+  padding: 40px 100px;
+
+  @media screen and (max-width: 860px) {
+    flex-direction: column;
+
+    gap: 50px;
+  }
+
+  &_block {
+    @include flex(center, center);
+  }
+}
+
+.block {
+@include flex(center, baseline);
+}
+
+.market {
+
+&__logo {
+@include size(168px);
+
+border-radius: 50%;
+}
+
+&__cap {
+  color: $white;
+
+  position: relative;
+
+  right: 105px;
+
+  background: $gray-300;
+
+  padding: 4px 12px;
+
+  border-radius: 8px;
+}
+
+&__info {
+  @include flex(flex-start, flex-start, column);
+
+  gap: 8px;
+
+&_name {
+  font-weight: 700;
+
+  font-size: 48px;
+
+  line-height: 56px;
+
+  color: $white;
+}
+
+&_symbol {
+  font-weight: 400;
+
+  font-size: 16px;
+
+  line-height: 24px;
+
+  color: $white;
+}
+
+  &_coin {
+    @include flex(flex-start, baseline);
+
+    gap: 12px;
+
+    padding-top: 15px;
+
+    &_block {
+      @include flex(flex-start, baseline);
+
+      gap: 8px;
+    }
+
+    &_price {
+      font-size: 22px;
+
+      line-height: 28px;
+
+      &_red {
+        color: $red-200;
+      }
+
+      &_title {
+        font-weight: 700;
+
+        font-size: 48px;
+
+        line-height: 60px;
+
+        color: $white;
+      }
+    }
+
+    &_symbol {
+      font-weight: 400;
+
+      font-size: 16px;
+
+      line-height: 24px;
+
+      color: $white;
+    }
+
+    &_percent {
+      font-weight: 700;
+
+      font-size: 22px;
+
+      line-height: 28px;
+
+      &_red {
+        color: $red-200;
+      }
+    }
+  }
+}
+
+&__description {
+&_block {
+  padding: 40px 100px;
+
+  @media screen and (max-width: 1024px) {
+    padding: 40px;
+  }
+}
+
+&_title {
+  font-weight: 600;
+
+  font-size: 30px;
+
+  color: $white;
+
+  margin-bottom: 20px;
+}
+
+&_info {
+  font-weight: 400;
+
+  font-size: 16px;
+
+  line-height: 30px;
+
+  color: $white;
+
+  a {
+    color: $blue-100;
+  }
+}
+}
+}
+
+.container {
+@include flex(center);
+
+margin-top: 50px;
+
+.tabs {
+display: flex;
+
+position: relative;
+
+background-color: $gray-300;
+
+padding: 0.75rem;
+
+border-radius: 99px;
+
+@media (max-width: 700px) {
+  transform: scale(0.6);
+}
+
+  &_tab {
+    @include flex(center);
+
+    color: $white-400;
+
+    height: 25px;
+
+    width: 200px;
+
+    font-size: 1.25rem;
+
+    font-weight: 500;
+
+    border-radius: 99px;
+
+    cursor: pointer;
+
+    transition: color 0.15s ease-in;
+  }
+}
+
+input[type="radio"] {
+display: none;
+&:checked {
+  + {
+    label {
+      color: $white-100;
+
+      z-index: 2;
+    }
+  }
+}
+}
+
+input[id="radio-1"] {
+&:checked {
+  ~ {
+    .glider {
+      transform: translateX(0);
+    }
+  }
+}
+}
+
+input[id="radio-2"] {
+&:checked {
+  ~ {
+    .glider {
+      transform: translateX(100%);
+    }
+  }
+}
+}
+
+input[id="radio-3"] {
+&:checked {
+  ~ {
+    .glider {
+      transform: translateX(200%);
+    }
+  }
+}
+}
+
+.glider {
+position: absolute;
+
+top: 7px;
+
+display: flex;
+
+height: 35px;
+
+width: 200px;
+
+background-color: $black-400;
+
+z-index: 1;
+
+border-radius: 99px;
+
+transition: 0.25s ease-out;
+}
+}
+
+.overview {
+@include flex(flex-start, center, column);
+
+gap: 50px;
+
+padding: 40px 100px;
+
+span {
+color: $white-50;
+}
+
+&__wrapper {
+display: flex;
+
+width: 100%;
+}
+
+&__block {
+@include flex(space-between, center, column);
+
+gap: 5px;
+
+width: 100%;
+
+padding: 5px;
+
+border-right: 1px solid $white-300;
+
+&:nth-last-child(1) {
+  border: none;
+}
+
+&_content {
+  @include flex(flex-start, flex-start, row);
+
+  gap: 10px;
+
+  background: $gray-300;
+
+  padding: 5px;
+
+  border-radius: 5px;
+}
+
+&_allTimePrice {
+  @include flex(center, center, column);
+
+  gap: 5px;
+
+  span {
+    &:nth-last-child(1) {
+      color: $gray;
+    }
+  }
+}
+
+&_marketCap {
+  justify-content: flex-start;
+}
+
+&_supply {
+  justify-content: center;
+
+  gap: 20px;
+}
+
+&_price {
+  span {
+    &:nth-last-child(1) {
+      color: $gray;
+    }
+  }
+}
+}
+
+&__period {
+&_wrapper {
+  display: flex;
+
+  column-gap: 20px;
+}
+
+&_block {
+  @include flex(center, center, column);
+
+  gap: 5px;
+
+  &_content {
+    @include flex(flex-start, flex-start, row);
+
+    gap: 10px;
+
+    background: $gray-300;
+
+    padding: 5px;
+
+    border-radius: 5px;
+  }
+}
+}
+
+&_red {
+color: $red-100 !important;
+}
+
+&_green {
+color: $green-50 !important;
+}
+
+}
+

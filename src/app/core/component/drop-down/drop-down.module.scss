@@ -1,0 +1,125 @@
+@import "src/app/styles/vars";
+@import "src/shared/ui/styles/mixins";
+
+.container {
+  position: relative;
+
+  width: fit-content;
+
+  min-width: 150px;
+}
+
+.content {
+  @include flex(flex-start, center, row);
+
+  width: -webkit-calc(100% - 16px);
+
+  height: 58px;
+
+  min-width: 150px;
+
+  padding-left: 16px;
+
+  color: $gray-175;
+
+  border: 1px solid $gray-175;
+
+  border-radius: 5px;
+
+  //border-bottom: none;
+  //border-radius: 5px 5px 0px 0px;
+
+  p {
+    font-size: 16px;
+  }
+}
+
+// Colors
+.black {
+  .content,
+  .options {
+    background-color: $black-100;
+  }
+}
+
+.white {
+  .content,
+  .options {
+    background-color: $white;
+  }
+}
+
+.icon {
+  @include size(18px);
+
+  position: absolute;
+
+  top: 54%;
+
+  right: 20px;
+
+  transform: translateY(-50%);
+
+  font-size: 16px;
+
+  color: $gray-175;
+
+  transition: 0.25s;
+
+  path {
+    //fill: $gray-350;
+    fill: $white-25;
+  }
+
+  &.focus {
+    right: 15px;
+  }
+}
+
+.focused {
+  .content {
+    border-radius: 5px 5px 0 0;
+
+    border: 2px solid $gray-350;
+
+    border-bottom: none;
+  }
+
+  .p {
+    color: $gray-350;
+  }
+}
+
+.options {
+  position: absolute;
+
+  top: 58px;
+
+  border: 2px solid $gray-350;
+
+  border-radius: 0 0 5px 5px;
+
+  width: -webkit-calc(100% - 0px);
+
+  background-color: $black-100;
+}
+
+.option {
+  margin: 0;
+
+  padding: 10px;
+
+  font-size: 16px;
+
+  transition: .2s;
+
+  cursor: pointer;
+
+  color: $white-25;
+
+  &:hover {
+    background-color: $white-125;
+
+    color: $black;
+  }
+}

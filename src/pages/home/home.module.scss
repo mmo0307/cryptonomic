@@ -118,7 +118,7 @@
 
       left: 0;
 
-      animation: marquee 60s cubic-bezier(0.01, 0.32, 0.58, 1) infinite;
+      animation: marquee 60s linear infinite none running;
     }
   }
 }
@@ -161,9 +161,9 @@
   }
 
   &_block {
-    @include flex(flex-end, center);
+    @include flex(space-around, center);
 
-    width: 1200px;
+    width: 90%;
 
     height: 800px;
 

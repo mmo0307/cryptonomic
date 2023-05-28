@@ -1,1 +1,1 @@
-export * from './type-text/TypeText';
+export * from './type-text/type-text.component';

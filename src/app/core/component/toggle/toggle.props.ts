@@ -6,17 +6,12 @@ type ToggleProps = {
   text: string;
 };
 
-const useToggle = (props: Partial<ToggleProps>) => {
-  const { number, title, text } = props;
-
+const useToggle = (props: ToggleProps) => {
   const [active, setActive] = useState<boolean>(false);
 
   return {
     active,
-    setActive,
-    number,
-    title,
-    text
+    setActive
   };
 };
 

@@ -3,6 +3,7 @@ import gsap from 'gsap';
 
 const useFavorite = () => {
   const [animated, setAnimated] = useState(false);
+
   const [active, setActive] = useState(false);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
