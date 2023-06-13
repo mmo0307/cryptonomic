@@ -25,4 +25,23 @@ const toDayDate = () => {
   return `${year}-${month}-${day}`;
 };
 
-export { formatNumberWithCommas, formatter, toDayDate };
+const formatBalance = (rawBalance: string) => {
+  return (parseInt(rawBalance) / 1000000000000000000).toFixed(2);
+};
+
+const formatChainAsNum = (chainIdHex: string) => {
+  return parseInt(chainIdHex);
+};
+
+const formatAddress = (addr: string) => {
+  return `${addr.slice(0, 5)}...${addr.slice(-4)}`;
+};
+
+export {
+  formatAddress,
+  formatBalance,
+  formatChainAsNum,
+  formatNumberWithCommas,
+  formatter,
+  toDayDate
+};

@@ -23,6 +23,10 @@ export const coinGeckoApiSlice = createApi({
         url: `/coins/${id}/market_chart?vs_currency=${currency}&days=${days}`
       })
       // providesTags: ['CoinGecko']
+    }),
+    getSearchTrending: builder.query({
+      query: arg => `/search/trending`
+      // providesTags: ['CoinGecko']
     })
     // createHero: builder.mutation({
     //   query: (hero, _limit) => ({
@@ -45,5 +49,9 @@ export const coinGeckoApiSlice = createApi({
   })
 });
 
-export const { useGetCoinsQuery, useGetCoinQuery, useGetMarketChartQuery } =
-  coinGeckoApiSlice;
+export const {
+  useGetCoinsQuery,
+  useGetCoinQuery,
+  useGetMarketChartQuery,
+  useGetSearchTrendingQuery
+} = coinGeckoApiSlice;

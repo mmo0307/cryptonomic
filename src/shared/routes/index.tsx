@@ -2,13 +2,14 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Error } from '@root/entities';
 import { CoinInfoComponent } from '@root/features';
-import { Arbitrage, Home } from '@root/pages';
+import { Arbitrage, Home, Market } from '@root/pages';
 
 import ROUTES from './routes';
 
 const generateRoutes = (flags?: Record<string, boolean>) => {
   const routes = [
     { route: ROUTES.root, element: <Home /> },
+    { route: ROUTES.market, element: <Market /> },
     { route: ROUTES.arbitrage, element: <Arbitrage /> },
     { route: ROUTES.coin, element: <CoinInfoComponent /> }
   ];

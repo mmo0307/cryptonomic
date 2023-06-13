@@ -36,8 +36,6 @@ const useHome = () => {
 
   const { data, isError, isLoading } = useGetCoinsQuery({ vs_currency: 'usd' });
 
-  console.log('data=>', data);
-
   return {
     faqData,
     isError,

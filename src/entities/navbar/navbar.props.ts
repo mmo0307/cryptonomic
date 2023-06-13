@@ -1,20 +1,24 @@
-import { useState } from 'react';
+import { useMetaMask } from '@shared/lib/hooks/use-meta-mask';
 
 const useNavbar = () => {
-  const [account, setAccount] = useState<string | null>(null);
-
-  const getAccount = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      const accounts = await window.ethereum.request({
-        method: 'eth_requestAccounts'
-      });
-      setAccount(accounts[0]);
-    }
-  };
+  const {
+    wallet,
+    hasProvider,
+    isConnecting,
+    connectMetaMask,
+    error,
+    errorMessage,
+    clearError
+  } = useMetaMask();
 
   return {
-    getAccount,
-    account
+    wallet,
+    hasProvider,
+    isConnecting,
+    connectMetaMask,
+    error,
+    errorMessage,
+    clearError
   };
 };
 
